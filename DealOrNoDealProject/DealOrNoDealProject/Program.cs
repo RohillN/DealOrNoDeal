@@ -15,29 +15,33 @@ namespace DealOrNoDealProject
     {
         static void Main()
         {
-            Players[] student = new Players[21];
-            //Menu();
-            ReadList(ref student);
-            //Display(ref student);
-            PickTen(ref student);
-            
+            //Players[] student = new Players[21];
+            Menu();                        
         }
 
         static void Menu()
         {
-            Console.WriteLine("Select 1/2/3/4");
+            Players[] student = new Players[21];
+            Console.WriteLine("Select 1/2/3/4\n1 = Top 10 people\n2 = Full List\n3 = Edit Play Information\n4 = In progress");
             int temp = Convert.ToInt32(Console.ReadLine());
 
             switch (temp)
             {
                 case 1:
-                    Console.WriteLine("Case 1");
+                    Console.WriteLine("Top 10 People");
+                    ReadList(ref student);
+                    ClassSort(ref student);
+                    PickTen(ref student);
                     break;
                 case 2:
-                    Console.WriteLine("Case 2");
+                    Console.WriteLine("Full List");
+                    ReadList(ref student);
+                    ClassSort(ref student);
+                    Display(ref student);
                     break;
                 case 3:
-                    Console.WriteLine("Case 3");
+                    Console.WriteLine("Edit a players infromation");
+                    EditStudents(ref student);
                     break;
                 case 4:
                     Console.WriteLine("Case 4");
@@ -54,20 +58,21 @@ namespace DealOrNoDealProject
             Random rand = new Random();
             string[] topTenList = new string[10];
 
-            for (int i = 0; i <= select.Length; i++)
+            for (int i = 0; i < select.Length; i++)
             {
                 temp = rand.Next(0, 21);
 
                 for (int j = 0; j < i; j++)
                 {
                     select[j] = temp;
-                    while (temp == select[j])
+                    while (select[j] == temp)
                     {
                         temp = rand.Next(0, 21);
                     }
                 }
             }
 
+            //Displaying top 10 and putting in a topTenList array
             for (int i = 0; i < select.Length; i++)
             {
                 string temp2 = student[select[i]].firstName + " " + student[select[i]].lastName;
@@ -79,7 +84,7 @@ namespace DealOrNoDealProject
                 Console.Write(select[i] + " ");
                 Console.WriteLine(topTenList[i]);                
             }
-
+            //Checking if users wants to draw a winner from the topTenList
             Console.WriteLine("\nPick a random player? Y/N");
             string temp3 = Console.ReadLine().ToLower();
 
@@ -99,8 +104,8 @@ namespace DealOrNoDealProject
             Random rand = new Random();
             int i = rand.Next(0, 10);
 
-            string temp = topTenList[i];
-            Console.WriteLine("\n" + i + " " + temp);
+            string WinningPlayer = topTenList[i];
+            Console.WriteLine("\n" + i + " " + WinningPlayer);
             Console.ReadLine();
         }
 
@@ -119,8 +124,31 @@ namespace DealOrNoDealProject
 
             sr.Close();
         }
+        static void ClassSort(ref Players[] student)
+        {
 
-        public static void Display(ref Players[] student)
+            for (int i = 0; i < student.Length - 1; i++)
+            {
+                for (int pos = 0; pos < student.Length - 1; pos++)
+                {
+                    if (student[pos + 1].lastName.CompareTo(student[pos].lastName) < 0)
+                    {
+                        ClassSwap(ref student[pos + 1], ref student[pos]);
+                    }
+                }
+            }
+        }
+
+        static void ClassSwap(ref Players pos1, ref Players pos2)
+        {
+            Players temp;
+
+            temp = pos1;
+            pos1 = pos2;
+            pos2 = temp;
+        }
+
+        static void Display(ref Players[] student)
         {
             int count = 0;
             Console.WriteLine("First Name".PadRight(15) + "Last Name".PadRight(15) + "Interest".PadRight(15) + "\n");
@@ -130,8 +158,70 @@ namespace DealOrNoDealProject
                 count = count + 1;
 
             } while (count < student.Length);
-            Console.ReadLine();
 
+        }
+
+        static void EditStudents(ref Players[] student)
+        {
+            ReadList(ref student);
+            ClassSort(ref student);
+            Display(ref student);
+            bool found = false;
+            bool invalidSectionPick = false;
+            Console.Write("\nWho do you want to edit: ");
+            string wanted = Console.ReadLine().ToLower();
+
+            for (int i = 0; i < student.Length; i++)
+            {
+                if (student[i].firstName.ToLower() == wanted)
+                {
+                    Console.WriteLine("You have picked: " + student[i].firstName);
+                    Console.WriteLine("What would you like to edit? \n1. First Name\n2. Last Name\n3. Interest\n4. All of the above");
+                    int sectionPick = Convert.ToInt32(Console.ReadLine());
+
+                    switch (sectionPick)
+                    {
+                        case 1:
+                            Console.Write("\nEnter new first name: ");
+                            student[i].firstName = Console.ReadLine();
+                            break;
+                        case 2:
+                            Console.Write("\nEnter new last name: ");
+                            student[i].lastName = Console.ReadLine();
+                            break;
+                        case 3:
+                            Console.Write("\nEnter new interest: ");
+                            student[i].interest = Console.ReadLine();
+                            break;
+                        case 4:
+                            Console.Write("\nEnter new first name: ");
+                            student[i].firstName = Console.ReadLine();
+                            Console.Write("\nEnter new last name: ");
+                            student[i].lastName = Console.ReadLine();
+                            Console.Write("\nEnter new interest: ");
+                            student[i].interest = Console.ReadLine();
+                            break;
+                        default:
+                            invalidSectionPick = true;
+                            break;
+                    }
+                    if (invalidSectionPick == true)
+                    {
+                        Console.WriteLine("Selection Invalid, Please Try Again");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Do you want to see the updated list? Y/N");
+                        string update = Console.ReadLine().ToLower();
+                        found = true;
+
+                        if (update == "y")
+                        {
+                            Display(ref student);
+                        }
+                    }
+                }
+            }
         }
 
 
