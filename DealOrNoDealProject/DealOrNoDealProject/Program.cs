@@ -65,7 +65,7 @@ namespace DealOrNoDealProject
                 for (int j = 0; j < i; j++)
                 {
                     select[j] = temp;
-                    while (select[j] == temp)
+                    while (temp == select[j])
                     {
                         temp = rand.Next(0, 21);
                     }
