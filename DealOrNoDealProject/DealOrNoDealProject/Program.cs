@@ -16,8 +16,10 @@ namespace DealOrNoDealProject
         static void Main()
         {
             //Players[] student = new Players[21];
-            Menu();                        
+            Menu();
         }
+
+        public static Random rand = new Random();
 
         static void Menu()
         {
@@ -31,7 +33,7 @@ namespace DealOrNoDealProject
                     Console.WriteLine("Top 10 People");
                     ReadList(ref student);
                     ClassSort(ref student);
-                    PickTen(ref student);
+                    CheckDuplicate(ref student);
                     break;
                 case 2:
                     Console.WriteLine("Full List");
@@ -50,17 +52,14 @@ namespace DealOrNoDealProject
             Console.ReadLine();
         }
 
-        static void PickTen(ref Players[] student)
+        static void CheckDuplicate(ref Players[] student)
         {
             //Checking for repeating numbers up to 10
-            int temp = 0;
             int[] select = new int[10];
-            Random rand = new Random();
-            string[] topTenList = new string[10];
 
-            for (int i = 0; i < select.Length; i++)
+            for (int i = 0; i <= select.Length; i++)
             {
-                temp = rand.Next(0, 21);
+                int temp = rand.Next(0, 21);
 
                 for (int j = 0; j < i; j++)
                 {
@@ -71,21 +70,27 @@ namespace DealOrNoDealProject
                     }
                 }
             }
+            PickTen(ref student, ref select);
 
+        }
+
+        static void PickTen(ref Players[] student, ref int[] select)
+        {
             //Displaying top 10 and putting in a topTenList array
+            string[] topTenList = new string[10];
             for (int i = 0; i < select.Length; i++)
             {
                 string temp2 = student[select[i]].firstName + " " + student[select[i]].lastName;
                 topTenList[i] = temp2;
             }
             Console.WriteLine("Top ten finalist\n");
-            for (int i = 0; i < select.Length; i++)
+            for (int i = 0; i < topTenList.Length; i++)
             {
                 Console.Write(select[i] + " ");
-                Console.WriteLine(topTenList[i]);                
+                Console.WriteLine(topTenList[i]);
             }
             //Checking if users wants to draw a winner from the topTenList
-            Console.WriteLine("\nPick a random player? Y/N");
+            Console.WriteLine("\nPick a random winning player? Y/N");
             string temp3 = Console.ReadLine().ToLower();
 
             if (temp3 == "y")
@@ -97,7 +102,10 @@ namespace DealOrNoDealProject
                 Menu();
             }
             Console.ReadLine();
+
         }
+
+
 
         static void PickOne(ref string[] topTenList)
         {
