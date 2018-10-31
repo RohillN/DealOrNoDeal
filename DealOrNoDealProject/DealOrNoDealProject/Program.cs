@@ -62,12 +62,12 @@ namespace DealOrNoDealProject
                 int temp = rand.Next(0, 21);
 
                 for (int j = 0; j < i; j++)
-                {
-                    select[j] = temp;
-                    while (temp == select[j])
+                {                    
+                    while (select.Contain(temp))
                     {
                         temp = rand.Next(0, 21);
                     }
+                    select[j] = temp;
                 }
             }
             PickTen(ref student, ref select);
@@ -104,7 +104,6 @@ namespace DealOrNoDealProject
             Console.ReadLine();
 
         }
-
 
 
         static void PickOne(ref string[] topTenList)
@@ -230,6 +229,12 @@ namespace DealOrNoDealProject
                     }
                 }
             }
+        }
+
+        static void Game(ref string WinningPlayer)
+        {
+            //Make a start on the game 
+
         }
 
 
