@@ -8,6 +8,12 @@ using System.Threading;
 
 namespace DealOrNoDeal
 {
+    public struct Case
+    {
+        public int caseNumber;
+        public int caseMoney;
+    }
+
     public struct Players
     {
         public string firstName;
@@ -28,9 +34,11 @@ namespace DealOrNoDeal
         static void Menu()
         {
             Players[] student = new Players[21];
+            Case[] money = new Case[26];
             Console.WriteLine("Select 1/2/3/4\n1 = Top 10 people\n2 = Full List\n3 = Edit Play Information\n4 = In progress");
             int temp = Convert.ToInt32(Console.ReadLine());
 
+            string WinningPlayer = null;
             switch (temp)
             {
                 case 1:
@@ -51,6 +59,8 @@ namespace DealOrNoDeal
                     break;
                 case 4:
                     Console.WriteLine("Case 4");
+                    Console.WriteLine("Stream writing in case number and money amount");
+                    Game(ref money, ref WinningPlayer);
                     break;
             }
             Console.ReadLine();
@@ -235,11 +245,22 @@ namespace DealOrNoDeal
             }
         }
 
-        static void Game(ref string WinningPlayer)
+        static void Game(ref Case[] money, ref string WinningPlayer)
         {
-            //Make a start on the game 
+            StreamWriter sw = new StreamWriter("TestCase.txt");
 
+            Console.WriteLine(WinningPlayer + " is playing...");
+            for (int i = 0; i < money.Length; i++)
+            {
+                sw.WriteLine(i);
+                Console.WriteLine("Enter Case Money Amount");
+                int amount = Convert.ToInt32(Console.ReadLine());
+                sw.WriteLine(amount);
+            }
+
+            sw.Close();
         }
+
 
 
     }
