@@ -57,7 +57,8 @@ namespace DealOrNoDeal
                     break;
                 case 4:
                     Console.WriteLine("Case 4");
-                    Console.WriteLine("Stream writing in case number and money amount");
+                    Console.WriteLine("Printing cases");
+                    CaseRandom(ref money);
                     break;
             }
             Console.ReadLine();
@@ -68,19 +69,28 @@ namespace DealOrNoDeal
             //Checking for repeating numbers up to 10
             int[] select = new int[10];
 
-            for (int i = 0; i <= select.Length; i++)
+            for (int i = 0; i < select.Length; i++)
             {
                 int temp = rand.Next(0, 21);
+                int count = 0;
 
-                for (int j = 0; j < i; j++)
-                {                    
-                    while (select.Contains(temp))
+                while (count <= i)
+                {
+                    if (temp == select[count])
                     {
+                        count = 0;
                         temp = rand.Next(0, 21);
+
                     }
-                    select[j] = temp;
+                    else
+                    {
+                        count = count + 1;
+                    }
+
                 }
+                select[i] = temp;
             }
+
             PickTen(ref student, ref select);
 
         }
@@ -119,7 +129,6 @@ namespace DealOrNoDeal
 
         static void PickOne(ref string[] topTenList)
         {
-            Random rand = new Random();
             int i = rand.Next(0, 10);
 
             string WinningPlayer = topTenList[i];
@@ -190,13 +199,13 @@ namespace DealOrNoDeal
             string wanted = Console.ReadLine().ToLower();
             do
             {
-                
+
                 if (attempt >= 1)
-                {                
+                {
                     Console.WriteLine("Sorry try again");
                     Console.Write("\nWho do you want to edit: ");
                     string newWanted = Console.ReadLine();
-                    wanted = newWanted;                   
+                    wanted = newWanted;
                 }
                 attempt = attempt + 1;
 
@@ -262,7 +271,7 @@ namespace DealOrNoDeal
 
                 }
             } while (found == false);
-            
+
         }
 
         static void SuitCaseReadList(ref Case[] money)
@@ -287,6 +296,17 @@ namespace DealOrNoDeal
             Console.ReadLine();*/
 
             sr.Close();
+        }
+
+        static void CaseRandom(ref Case[] money)
+        {
+            for (int i = 0; i < money.Length; i++)
+            {
+                int temp = rand.Next(0, 26);
+                Console.WriteLine("Case: " + money[i].caseNumber);
+                Console.WriteLine("Case contains: {0:c}", money[temp].caseMoney);
+            }
+            Console.ReadLine();
         }
 
 
