@@ -66,12 +66,12 @@ namespace DealOrNoDeal
                 int temp = rand.Next(0, 21);
 
                 for (int j = 0; j < i; j++)
-                {
-                    select[j] = temp;
-                    while (temp == select[j])
+                {                    
+                    while (select.Contains(temp))
                     {
                         temp = rand.Next(0, 21);
-                    }           
+                    }
+                    select[j] = temp;
                 }
             }
             PickTen(ref student, ref select);
