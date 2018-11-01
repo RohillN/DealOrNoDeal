@@ -25,7 +25,6 @@ namespace DealOrNoDeal
     {
         static void Main()
         {
-            //Players[] student = new Players[21];
             Menu();
         }
 
@@ -35,21 +34,20 @@ namespace DealOrNoDeal
         {
             Players[] student = new Players[21];
             Case[] money = new Case[26];
+            StudentReadList(ref student);
+            SuitCaseReadList(ref money);
             Console.WriteLine("Select 1/2/3/4\n1 = Top 10 people\n2 = Full List\n3 = Edit Play Information\n4 = In progress");
             int temp = Convert.ToInt32(Console.ReadLine());
 
-            string WinningPlayer = null;
             switch (temp)
             {
                 case 1:
                     Console.WriteLine("Top 10 People");
-                    ReadList(ref student);
                     ClassSort(ref student);
                     CheckDuplicate(ref student);
                     break;
                 case 2:
                     Console.WriteLine("Full List");
-                    ReadList(ref student);
                     ClassSort(ref student);
                     Display(ref student);
                     break;
@@ -60,7 +58,6 @@ namespace DealOrNoDeal
                 case 4:
                     Console.WriteLine("Case 4");
                     Console.WriteLine("Stream writing in case number and money amount");
-                    Game(ref money, ref WinningPlayer);
                     break;
             }
             Console.ReadLine();
@@ -130,7 +127,7 @@ namespace DealOrNoDeal
             Console.ReadLine();
         }
 
-        static void ReadList(ref Players[] student)
+        static void StudentReadList(ref Players[] student)
         {
             StreamReader sr = new StreamReader("DealOrNoDeal.txt");
             int count = 0;
@@ -184,81 +181,112 @@ namespace DealOrNoDeal
 
         static void EditStudents(ref Players[] student)
         {
-            ReadList(ref student);
             ClassSort(ref student);
             Display(ref student);
             bool found = false;
             bool invalidSectionPick = false;
+            int attempt = 0;
             Console.Write("\nWho do you want to edit: ");
             string wanted = Console.ReadLine().ToLower();
-
-            for (int i = 0; i < student.Length; i++)
+            do
             {
-                if (student[i].firstName.ToLower() == wanted)
-                {
-                    Console.WriteLine("You have picked: " + student[i].firstName);
-                    Console.WriteLine("What would you like to edit? \n1. First Name\n2. Last Name\n3. Interest\n4. All of the above");
-                    int sectionPick = Convert.ToInt32(Console.ReadLine());
-
-                    switch (sectionPick)
-                    {
-                        case 1:
-                            Console.Write("\nEnter new first name: ");
-                            student[i].firstName = Console.ReadLine();
-                            break;
-                        case 2:
-                            Console.Write("\nEnter new last name: ");
-                            student[i].lastName = Console.ReadLine();
-                            break;
-                        case 3:
-                            Console.Write("\nEnter new interest: ");
-                            student[i].interest = Console.ReadLine();
-                            break;
-                        case 4:
-                            Console.Write("\nEnter new first name: ");
-                            student[i].firstName = Console.ReadLine();
-                            Console.Write("\nEnter new last name: ");
-                            student[i].lastName = Console.ReadLine();
-                            Console.Write("\nEnter new interest: ");
-                            student[i].interest = Console.ReadLine();
-                            break;
-                        default:
-                            invalidSectionPick = true;
-                            break;
-                    }
-                    if (invalidSectionPick == true)
-                    {
-                        Console.WriteLine("Selection Invalid, Please Try Again");
-                    }
-                    else
-                    {
-                        Console.WriteLine("Do you want to see the updated list? Y/N");
-                        string update = Console.ReadLine().ToLower();
-                        found = true;
-
-                        if (update == "y")
-                        {
-                            Display(ref student);
-                        }
-                    }
+                
+                if (attempt >= 1)
+                {                
+                    Console.WriteLine("Sorry try again");
+                    Console.Write("\nWho do you want to edit: ");
+                    string newWanted = Console.ReadLine();
+                    wanted = newWanted;                   
                 }
-            }
+                attempt = attempt + 1;
+
+                for (int i = 0; i < student.Length; i++)
+                {
+                    if (student[i].firstName.ToLower() == wanted)
+                    {
+                        found = true;
+                        do
+                        {
+                            Console.WriteLine("You have picked: " + student[i].firstName);
+                            Console.WriteLine("What would you like to edit? \n1. First Name\n2. Last Name\n3. Interest\n4. All of the above");
+                            int sectionPick = Convert.ToInt32(Console.ReadLine());
+
+                            switch (sectionPick)
+                            {
+                                case 1:
+                                    Console.Write("\nEnter new first name: ");
+                                    student[i].firstName = Console.ReadLine();
+                                    invalidSectionPick = false;
+                                    break;
+                                case 2:
+                                    Console.Write("\nEnter new last name: ");
+                                    student[i].lastName = Console.ReadLine();
+                                    invalidSectionPick = false;
+                                    break;
+                                case 3:
+                                    Console.Write("\nEnter new interest: ");
+                                    student[i].interest = Console.ReadLine();
+                                    invalidSectionPick = false;
+                                    break;
+                                case 4:
+                                    Console.Write("\nEnter new first name: ");
+                                    student[i].firstName = Console.ReadLine();
+                                    Console.Write("\nEnter new last name: ");
+                                    student[i].lastName = Console.ReadLine();
+                                    Console.Write("\nEnter new interest: ");
+                                    student[i].interest = Console.ReadLine();
+                                    invalidSectionPick = false;
+                                    break;
+                                default:
+                                    invalidSectionPick = true;
+                                    break;
+                            }
+
+                            if (invalidSectionPick == true)
+                            {
+                                Console.WriteLine("Selection Invalid, Please Try Again");
+
+                            }
+                            else
+                            {
+                                Console.WriteLine("Do you want to see the updated list? Y/N");
+                                string update = Console.ReadLine().ToLower();
+
+                                if (update == "y")
+                                {
+                                    Display(ref student);
+                                }
+                            }
+                        } while (invalidSectionPick == true);
+                    }
+
+                }
+            } while (found == false);
+            
         }
 
-        static void Game(ref Case[] money, ref string WinningPlayer)
+        static void SuitCaseReadList(ref Case[] money)
         {
-            StreamWriter sw = new StreamWriter("TestCase.txt");
-
-            Console.WriteLine(WinningPlayer + " is playing...");
-            for (int i = 0; i < money.Length; i++)
+            StreamReader sr = new StreamReader("TestCase.txt");
+            int count = 0;
+            do
             {
-                sw.WriteLine(i);
-                Console.WriteLine("Enter Case Money Amount");
-                int amount = Convert.ToInt32(Console.ReadLine());
-                sw.WriteLine(amount);
-            }
+                money[count].caseNumber = Convert.ToInt32(sr.ReadLine());
+                money[count].caseMoney = Convert.ToInt32(sr.ReadLine());
+                count = count + 1;
 
-            sw.Close();
+            } while (count < money.Length);
+
+
+            /*for (int i = 0; i < money.Length; i++)
+            {
+                Console.WriteLine(money[i].caseNumber);
+                Console.WriteLine(money[i].caseMoney);
+
+            }
+            Console.ReadLine();*/
+
+            sr.Close();
         }
 
 
