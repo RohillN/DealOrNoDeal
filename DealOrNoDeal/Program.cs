@@ -36,7 +36,7 @@ namespace DealOrNoDeal
             Case[] money = new Case[26];
             StudentReadList(ref student);
             SuitCaseReadList(ref money);
-            Console.WriteLine("Select 1/2/3/4\n1 = Top 10 people\n2 = Full List\n3 = Edit Play Information\n4 = In progress");
+            Console.WriteLine("Select 1/2/3/4\n1 = Top 10 people\n2 = Full List\n3 = Edit Play Information\n4 = Checking case number and amount");
             int temp = Convert.ToInt32(Console.ReadLine());
 
             switch (temp)
@@ -44,7 +44,7 @@ namespace DealOrNoDeal
                 case 1:
                     Console.WriteLine("Top 10 People");
                     ClassSort(ref student);
-                    CheckDuplicate(ref student);
+                    CheckDuplicatePlayers(ref student);
                     break;
                 case 2:
                     Console.WriteLine("Full List");
@@ -56,15 +56,14 @@ namespace DealOrNoDeal
                     EditStudents(ref student);
                     break;
                 case 4:
-                    Console.WriteLine("Case 4");
-                    Console.WriteLine("Printing cases");
-                    CaseRandom(ref money);
+                    Console.WriteLine("Switch Case 4");
+                    CheckDuplicateCaseMoney(ref money);
                     break;
             }
             Console.ReadLine();
         }
 
-        static void CheckDuplicate(ref Players[] student)
+        static void CheckDuplicatePlayers(ref Players[] student)
         {
             //Checking for repeating numbers up to 10
             int[] select = new int[10];
@@ -297,14 +296,43 @@ namespace DealOrNoDeal
 
             sr.Close();
         }
+        static void CheckDuplicateCaseMoney(ref Case[] money)
+        {
+            //Checking for repeating numbers up to 10
+            int[] check = new int[26];
 
-        static void CaseRandom(ref Case[] money)
+            for (int i = 0; i < check.Length; i++)
+            {
+                int temp = rand.Next(0, 26);
+                int count = 0;
+
+                while (count <= i)
+                {
+                    if (temp == check[count])
+                    {
+                        count = 0;
+                        temp = rand.Next(0, 26);
+
+                    }
+                    else
+                    {
+                        count = count + 1;
+                    }
+
+                }
+                check[i] = temp;
+            }
+
+            CaseRandom(ref money, ref check);
+
+        }
+
+        static void CaseRandom(ref Case[] money, ref int[] check)
         {
             for (int i = 0; i < money.Length; i++)
             {
-                int temp = rand.Next(0, 26);
                 Console.WriteLine("Case: " + money[i].caseNumber);
-                Console.WriteLine("Case contains: {0:c}", money[temp].caseMoney);
+                Console.WriteLine("Case contains: {0:c}", money[check[i]].caseMoney);
             }
             Console.ReadLine();
         }
