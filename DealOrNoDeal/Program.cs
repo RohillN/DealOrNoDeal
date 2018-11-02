@@ -32,6 +32,7 @@ namespace DealOrNoDeal
 
         static void Menu()
         {
+            IntroText();
             Players[] student = new Players[21];
             Case[] money = new Case[26];
             StudentReadList(ref student);
@@ -124,7 +125,6 @@ namespace DealOrNoDeal
             Console.ReadLine();
 
         }
-
 
         static void PickOne(ref string[] topTenList)
         {
@@ -285,20 +285,11 @@ namespace DealOrNoDeal
 
             } while (count < money.Length);
 
-
-            /*for (int i = 0; i < money.Length; i++)
-            {
-                Console.WriteLine(money[i].caseNumber);
-                Console.WriteLine(money[i].caseMoney);
-
-            }
-            Console.ReadLine();*/
-
             sr.Close();
         }
         static void CheckDuplicateCaseMoney(ref Case[] money)
         {
-            //Checking for repeating numbers up to 10
+            //Checking for repeating numbers up to 26
             int[] check = new int[26];
 
             for (int i = 0; i < check.Length; i++)
@@ -306,7 +297,7 @@ namespace DealOrNoDeal
                 int temp = rand.Next(0, 26);
                 int count = 0;
 
-                while (count <= i)
+                while (count < i)
                 {
                     if (temp == check[count])
                     {
@@ -322,14 +313,18 @@ namespace DealOrNoDeal
                 }
                 check[i] = temp;
             }
-
-            CaseRandom(ref money, ref check);
-
+            /*for (int i = 0; i < check.Length; i++)
+            {
+                Console.WriteLine("Case: " + money[i].caseNumber);
+                Console.WriteLine("Case contains: {0:c}", money[check[i]].caseMoney);
+            }
+            Console.ReadLine();*/
+            CaseRandom(ref money, ref check);            
         }
 
         static void CaseRandom(ref Case[] money, ref int[] check)
         {
-            for (int i = 0; i < money.Length; i++)
+            for (int i = 0; i < check.Length; i++)
             {
                 Console.WriteLine("Case: " + money[i].caseNumber);
                 Console.WriteLine("Case contains: {0:c}", money[check[i]].caseMoney);
@@ -337,7 +332,18 @@ namespace DealOrNoDeal
             Console.ReadLine();
         }
 
+        static void IntroText()
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine(@"'||''|.                   '||   ..|''||           '|.   '|'         '||''|.                   '||  ");
+            Console.WriteLine(@" ||   ||    ....   ....    ||  .|'    ||  ... ..   |'|   |    ...    ||   ||    ....   ....    ||  ");
+            Console.WriteLine(@" ||    || .|...|| '' .||   ||  ||      ||  ||' ''  | '|. |  .|  '|.  ||    || .|...|| '' .||   ||  ");
+            Console.WriteLine(@" ||    || ||      .|' ||   ||  '|.     ||  ||      |   |||  ||   ||  ||    || ||      .|' ||   ||  ");
+            Console.WriteLine(@".||...|'   '|...' '|..'|' .||.  ''|...|'  .||.    .|.   '|   '|..|' .||...|'   '|...' '|..'|' .||. ");
+            Console.WriteLine(@"");
+            Console.ResetColor();
 
 
+        }
     }
 }
