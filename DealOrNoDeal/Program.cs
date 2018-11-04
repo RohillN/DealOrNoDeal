@@ -63,6 +63,18 @@ namespace DealOrNoDeal
             }
             Console.ReadLine();
         }
+        static void IntroText()
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine(@"'||''|.                   '||   ..|''||           '|.   '|'         '||''|.                   '||  ");
+            Console.WriteLine(@" ||   ||    ....   ....    ||  .|'    ||  ... ..   |'|   |    ...    ||   ||    ....   ....    ||  ");
+            Console.WriteLine(@" ||    || .|...|| '' .||   ||  ||      ||  ||' ''  | '|. |  .|  '|.  ||    || .|...|| '' .||   ||  ");
+            Console.WriteLine(@" ||    || ||      .|' ||   ||  '|.     ||  ||      |   |||  ||   ||  ||    || ||      .|' ||   ||  ");
+            Console.WriteLine(@".||...|'   '|...' '|..'|' .||.  ''|...|'  .||.    .|.   '|   '|..|' .||...|'   '|...' '|..'|' .||. ");
+            Console.WriteLine(@"");
+            Console.ResetColor();
+
+        }
 
         static void CheckDuplicatePlayers(ref Players[] student)
         {
@@ -313,37 +325,56 @@ namespace DealOrNoDeal
                 }
                 check[i] = temp;
             }
-            /*for (int i = 0; i < check.Length; i++)
-            {
-                Console.WriteLine("Case: " + money[i].caseNumber);
-                Console.WriteLine("Case contains: {0:c}", money[check[i]].caseMoney);
-            }
-            Console.ReadLine();*/
-            CaseRandom(ref money, ref check);            
+            CasePick(ref money, ref check);            
         }
 
-        static void CaseRandom(ref Case[] money, ref int[] check)
+        static void CasePick(ref Case[] money, ref int[] check)
         {
+
+            int count = 1; //1 == 0 in array slot -- for user case pick 
             for (int i = 0; i < check.Length; i++)
             {
-                Console.WriteLine("Case: " + money[i].caseNumber);
-                Console.WriteLine("Case contains: {0:c}", money[check[i]].caseMoney);
+                Console.WriteLine("Case: " + count);  //+1
+                Console.WriteLine("{0:c}", money[check[i]].caseMoney);
+                count = count + 1;
             }
+
+            Console.WriteLine("Please pick a case number");
+            int caseHold = Convert.ToInt32(Console.ReadLine());
+
+            Console.WriteLine("Players case number: {0}", caseHold); 
+            Console.WriteLine("Case contains: {0:c}",money[check[caseHold - 1]].caseMoney);     //users input - 1 == index in array slot
+
+            Console.ReadLine();
+            UserPickCase(ref money, ref check, ref caseHold);
+        }
+
+        static void UserPickCase (ref Case[] money, ref int[] check, ref int caseHold)
+        {
+            int index = 0;
+            int pick = caseHold - 1;
+            int[] updatedCases = new int[check.Length - index];
+
+            for (int i = 0; i < check.Length; i++)
+            {
+                if (check[i] != pick)
+                {
+                    updatedCases[index] = check[i];
+                    index = index + 1;
+                }
+
+                //Array.Resize(ref updatedCases, 25);
+
+            }
+
+            for (int i = 0; i < updatedCases.Length; i++)
+            {
+                Console.WriteLine((updatedCases[i] + 1));
+            }
+            Console.WriteLine("User pick array index: " + pick);
+            Console.WriteLine("Users pick with added 1: " + (pick + 1));
             Console.ReadLine();
         }
 
-        static void IntroText()
-        {
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine(@"'||''|.                   '||   ..|''||           '|.   '|'         '||''|.                   '||  ");
-            Console.WriteLine(@" ||   ||    ....   ....    ||  .|'    ||  ... ..   |'|   |    ...    ||   ||    ....   ....    ||  ");
-            Console.WriteLine(@" ||    || .|...|| '' .||   ||  ||      ||  ||' ''  | '|. |  .|  '|.  ||    || .|...|| '' .||   ||  ");
-            Console.WriteLine(@" ||    || ||      .|' ||   ||  '|.     ||  ||      |   |||  ||   ||  ||    || ||      .|' ||   ||  ");
-            Console.WriteLine(@".||...|'   '|...' '|..'|' .||.  ''|...|'  .||.    .|.   '|   '|..|' .||...|'   '|...' '|..'|' .||. ");
-            Console.WriteLine(@"");
-            Console.ResetColor();
-
-
-        }
     }
 }
