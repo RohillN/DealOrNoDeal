@@ -83,7 +83,7 @@ namespace DealOrNoDeal
 
             for (int i = 0; i < select.Length; i++)
             {
-                int temp = rand.Next(0, 21);
+                int temp = rand.Next(1, 22);
                 int count = 0;
 
                 while (count <= i)
@@ -91,7 +91,7 @@ namespace DealOrNoDeal
                     if (temp == select[count])
                     {
                         count = 0;
-                        temp = rand.Next(0, 21);
+                        temp = rand.Next(1, 22);
 
                     }
                     else
@@ -113,7 +113,7 @@ namespace DealOrNoDeal
             string[] topTenList = new string[10];
             for (int i = 0; i < select.Length; i++)
             {
-                string temp2 = student[select[i]].firstName + " " + student[select[i]].lastName;
+                string temp2 = student[(select[i] - 1)].firstName + " " + student[(select[i] - 1)].lastName;
                 topTenList[i] = temp2;
             }
             Console.WriteLine("Top ten finalist\n");
@@ -328,9 +328,32 @@ namespace DealOrNoDeal
             CasePick(ref money, ref check);            
         }
 
+        /*static void CaseSort(ref Case[] money)
+        {
+            for (int i = 0; i < money.Length -1; i++)
+            {
+                for (int pos = 0; pos < money.Length -1; pos++)
+                {
+                    if (money[pos + 1].caseNumber < money[pos].caseNumber)
+                    {
+                        CaseSwap(ref money[pos + 1], ref money[pos]);
+                    }
+                }
+            }
+        }*/
+
+        static void CaseSwap(ref int pos1, ref int pos2)
+        {
+            int temp;
+
+            temp = pos1;
+            pos1 = pos2;
+            pos2 = temp;
+        }
+
         static void CasePick(ref Case[] money, ref int[] check)
         {
-
+            int round = 0;
             int count = 1; //1 == 0 in array slot -- for user case pick 
             for (int i = 0; i < check.Length; i++)
             {
@@ -345,15 +368,23 @@ namespace DealOrNoDeal
             Console.WriteLine("Players case number: {0}", caseHold); 
             Console.WriteLine("Case contains: {0:c}",money[check[caseHold - 1]].caseMoney);     //users input - 1 == index in array slot
 
-            Console.ReadLine();
+            do
+            {
+
+
+            } while (round < 6);
+
+
+
+
             UserPickCase(ref money, ref check, ref caseHold);
         }
 
-        static void UserPickCase (ref Case[] money, ref int[] check, ref int caseHold)
+        static void UserPickCase(ref Case[] money, ref int[] check, ref int caseHold)
         {
             int index = 0;
             int pick = caseHold - 1;
-            int[] updatedCases = new int[check.Length - index];
+            int[] updatedCases = new int[check.Length];
 
             for (int i = 0; i < check.Length; i++)
             {
@@ -362,18 +393,32 @@ namespace DealOrNoDeal
                     updatedCases[index] = check[i];
                     index = index + 1;
                 }
-
-                //Array.Resize(ref updatedCases, 25);
-
+                Array.Resize(ref updatedCases, 25);
             }
 
+            for (int i = 0; i < updatedCases.Length - 1; i++)
+            {
+                for (int pos = 0; pos < updatedCases.Length - 1; pos++)
+                {
+                    if (updatedCases[pos + 1] < updatedCases[pos])
+                    {
+                        CaseSwap(ref updatedCases[pos + 1], ref updatedCases[pos]);
+                    }
+                }
+            }
+            DisplayAvalibleCases(ref money, ref updatedCases, ref pick);
+        }
+
+
+        static void DisplayAvalibleCases(ref Case[] money, ref int[] updatedCases, ref int pick)
+        {
             for (int i = 0; i < updatedCases.Length; i++)
             {
-                Console.WriteLine((updatedCases[i] + 1));
+                Console.Write((updatedCases[i] + 1) + " ");
             }
-            Console.WriteLine("User pick array index: " + pick);
-            Console.WriteLine("Users pick with added 1: " + (pick + 1));
-            Console.ReadLine();
+            Console.WriteLine("\nUser pick array index: " + pick);
+            Console.WriteLine("Users pick with added 1: " + (pick + 1) + "\n");
+
         }
 
     }
