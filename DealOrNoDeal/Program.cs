@@ -303,6 +303,7 @@ namespace DealOrNoDeal
         {
             //Checking for repeating numbers up to 26
             int[] check = new int[26];
+            int[] randomC = new int[26];
 
             for (int i = 0; i < check.Length; i++)
             {
@@ -324,23 +325,25 @@ namespace DealOrNoDeal
 
                 }
                 check[i] = temp;
+                randomC[i] = check[i];
             }
-            CasePick(ref money, ref check);            
+            Order(ref money, ref check);
+            DisplayAvalibleCases(ref money, ref check, ref randomC);
         }
 
-        /*static void CaseSort(ref Case[] money)
+        static void Order(ref Case[] money, ref int[] check)
         {
-            for (int i = 0; i < money.Length -1; i++)
+            for (int i = 0; i < check.Length - 1; i++)
             {
-                for (int pos = 0; pos < money.Length -1; pos++)
+                for (int pos = 0; pos < check.Length - 1; pos++)
                 {
-                    if (money[pos + 1].caseNumber < money[pos].caseNumber)
+                    if (check[pos + 1] < check[pos])
                     {
-                        CaseSwap(ref money[pos + 1], ref money[pos]);
+                        CaseSwap(ref check[pos + 1], ref check[pos]);
                     }
                 }
             }
-        }*/
+        }
 
         static void CaseSwap(ref int pos1, ref int pos2)
         {
@@ -351,75 +354,109 @@ namespace DealOrNoDeal
             pos2 = temp;
         }
 
-        static void CasePick(ref Case[] money, ref int[] check)
+        static void DisplayAvalibleCases(ref Case[] money, ref int[] check, ref int[] randomC)
         {
-            int round = 0;
-            int count = 1; //1 == 0 in array slot -- for user case pick 
             for (int i = 0; i < check.Length; i++)
             {
-                Console.WriteLine("Case: " + count);  //+1
-                Console.WriteLine("{0:c}", money[check[i]].caseMoney);
-                count = count + 1;
+                Console.WriteLine(check[i] + 1);
+                Console.WriteLine("{0:c}", money[randomC[i]].caseMoney);
             }
 
-            Console.WriteLine("Please pick a case number");
-            int caseHold = Convert.ToInt32(Console.ReadLine());
+            CasePick(ref money, ref check, ref randomC);
+            UserPickCase(ref money, ref check);
 
-            Console.WriteLine("Players case number: {0}", caseHold); 
-            Console.WriteLine("Case contains: {0:c}",money[check[caseHold - 1]].caseMoney);     //users input - 1 == index in array slot
+        }
+
+
+        static void CasePick(ref Case[] money, ref int[] check, ref int[] randomC)
+        {
+            int caseHold;
+            Console.Write("\n\nPlease pick a case number to keep: ");
+            caseHold = Convert.ToInt32(Console.ReadLine());
+
+            Console.WriteLine("Players case number: {0}", caseHold);
+            Console.WriteLine("Case contains: {0:c}", money[randomC[caseHold - 1]].caseMoney);     //users input - 1 == index in array slot
+        }
+
+        static void UserPickCase(ref Case[] money, ref int[] check)
+        {
+            int[] fillCasesPick = new int[26];
+            int round = 6;
+            int index = 0;
 
             do
             {
+                Console.Write("\nPick a case: ");
+                fillCasesPick[index] = Convert.ToInt32(Console.ReadLine());
+                index = index + 1;
+                round = round - 1;
 
+            } while (round > 0);
 
-            } while (round < 6);
-
-
-
-
-            UserPickCase(ref money, ref check, ref caseHold);
+            Erase(ref money, ref check, ref fillCasesPick);
         }
 
-        static void UserPickCase(ref Case[] money, ref int[] check, ref int caseHold)
+        static void Erase (ref Case[] money, ref int[] check, ref int[] fillCasesPick)
         {
-            int index = 0;
-            int pick = caseHold - 1;
-            int[] updatedCases = new int[check.Length];
-
+            int[] test = new int[check.Length];
+            int count = 0;
             for (int i = 0; i < check.Length; i++)
             {
-                if (check[i] != pick)
+                while (count < i)
                 {
-                    updatedCases[index] = check[i];
-                    index = index + 1;
-                }
-                Array.Resize(ref updatedCases, 25);
-            }
-
-            for (int i = 0; i < updatedCases.Length - 1; i++)
-            {
-                for (int pos = 0; pos < updatedCases.Length - 1; pos++)
-                {
-                    if (updatedCases[pos + 1] < updatedCases[pos])
+                    if (fillCasesPick[i] == check[count])
                     {
-                        CaseSwap(ref updatedCases[pos + 1], ref updatedCases[pos]);
+                        //test[index] = check[i];
+                        //index = index + 1;
+                        count = 0;
                     }
+                    else
+                    {
+                        count = count + 1;
+                    }                    
                 }
+                test[i] = check[count];
             }
-            DisplayAvalibleCases(ref money, ref updatedCases, ref pick);
-        }
 
-
-        static void DisplayAvalibleCases(ref Case[] money, ref int[] updatedCases, ref int pick)
-        {
-            for (int i = 0; i < updatedCases.Length; i++)
+            Console.WriteLine("Updated List");
+            for (int i = 0; i < test.Length; i++)
             {
-                Console.Write((updatedCases[i] + 1) + " ");
+                Console.Write(test[i]+ " ");
             }
-            Console.WriteLine("\nUser pick array index: " + pick);
-            Console.WriteLine("Users pick with added 1: " + (pick + 1) + "\n");
 
         }
+
+        /*static void RoundOne(ref Case[] money, ref int[] check)
+        {
+            int startRound = 0;
+            int endRound = 6;
+        }
+        static void RoundTwo(ref Case[] money, ref int[] check)
+        {
+            int startRound = 0;
+            int endRound = 5;
+        }
+        static void RoundThree(ref Case[] money, ref int[] check)
+        {
+            int startRound = 0;
+            int endRound = 4;
+        }
+        static void RoundFour(ref Case[] money, ref int[] check)
+        {
+            int startRound = 0;
+            int endRound = 3;
+        }
+        static void RoundFive(ref Case[] money, ref int[] check)
+        {
+            int startRound = 0;
+            int endRound = 3;
+        }
+        static void RoundFive(ref Case[] money, ref int[] check)
+        {
+            int startRound = 0;
+            int endRound = 3;
+        }
+        */
 
     }
 }
