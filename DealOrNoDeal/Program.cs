@@ -325,13 +325,13 @@ namespace DealOrNoDeal
 
                 }
                 check[i] = temp;
-                randomC[i] = check[i];
+                randomC[i] = temp;
             }
-            Order(ref money, ref check);
+            Order(ref money, ref check, ref randomC);
             DisplayAvalibleCases(ref money, ref check, ref randomC);
         }
 
-        static void Order(ref Case[] money, ref int[] check)
+        static void Order(ref Case[] money, ref int[] check, ref int[] randomC)
         {
             for (int i = 0; i < check.Length - 1; i++)
             {
@@ -343,6 +343,7 @@ namespace DealOrNoDeal
                     }
                 }
             }
+            DisplayAvalibleCases(ref money, ref check, ref randomC);
         }
 
         static void CaseSwap(ref int pos1, ref int pos2)
@@ -356,107 +357,53 @@ namespace DealOrNoDeal
 
         static void DisplayAvalibleCases(ref Case[] money, ref int[] check, ref int[] randomC)
         {
+            int count = 1;
             for (int i = 0; i < check.Length; i++)
             {
                 Console.WriteLine(check[i] + 1);
                 Console.WriteLine("{0:c}", money[randomC[i]].caseMoney);
+                count = count + 1;
             }
-
-            CasePick(ref money, ref check, ref randomC);
-            UserPickCase(ref money, ref check);
-
+            CasePick(ref money, ref check);
         }
 
 
-        static void CasePick(ref Case[] money, ref int[] check, ref int[] randomC)
+        static void CasePick(ref Case[] money, ref int[] check)
         {
             int caseHold;
             Console.Write("\n\nPlease pick a case number to keep: ");
             caseHold = Convert.ToInt32(Console.ReadLine());
 
             Console.WriteLine("Players case number: {0}", caseHold);
-            Console.WriteLine("Case contains: {0:c}", money[randomC[caseHold - 1]].caseMoney);     //users input - 1 == index in array slot
+            Console.WriteLine("Case contains: {0:c}", money[check[caseHold - 1]].caseMoney);     //users input - 1 == index in array slot
+
+            Del(ref money, ref check, ref caseHold);
         }
 
-        static void UserPickCase(ref Case[] money, ref int[] check)
+        static void Del(ref Case[] money, ref int[] check, ref int caseHold)
         {
-            int[] fillCasesPick = new int[26];
-            int round = 6;
             int index = 0;
+            int[] updatedList = new int[check.Length - index];
 
-            do
-            {
-                Console.Write("\nPick a case: ");
-                fillCasesPick[index] = Convert.ToInt32(Console.ReadLine());
-                index = index + 1;
-                round = round - 1;
-
-            } while (round > 0);
-
-            Erase(ref money, ref check, ref fillCasesPick);
-        }
-
-        static void Erase (ref Case[] money, ref int[] check, ref int[] fillCasesPick)
-        {
-            int[] test = new int[check.Length];
-            int count = 0;
             for (int i = 0; i < check.Length; i++)
             {
-                while (count < i)
+                if (check[i] != (caseHold - 1))
                 {
-                    if (fillCasesPick[i] == check[count])
-                    {
-                        //test[index] = check[i];
-                        //index = index + 1;
-                        count = 0;
-                    }
-                    else
-                    {
-                        count = count + 1;
-                    }                    
+                    updatedList[index] = check[i];
+                    index = index + 1;
                 }
-                test[i] = check[count];
             }
 
             Console.WriteLine("Updated List");
-            for (int i = 0; i < test.Length; i++)
+            for (int i =0; i < updatedList.Length; i++)
             {
-                Console.Write(test[i]+ " ");
+                Console.Write((updatedList[i] + 1) + " ");
+                Array.Resize(ref updatedList, 25);
             }
-
+            Console.ReadLine();
         }
 
-        /*static void RoundOne(ref Case[] money, ref int[] check)
-        {
-            int startRound = 0;
-            int endRound = 6;
-        }
-        static void RoundTwo(ref Case[] money, ref int[] check)
-        {
-            int startRound = 0;
-            int endRound = 5;
-        }
-        static void RoundThree(ref Case[] money, ref int[] check)
-        {
-            int startRound = 0;
-            int endRound = 4;
-        }
-        static void RoundFour(ref Case[] money, ref int[] check)
-        {
-            int startRound = 0;
-            int endRound = 3;
-        }
-        static void RoundFive(ref Case[] money, ref int[] check)
-        {
-            int startRound = 0;
-            int endRound = 3;
-        }
-        static void RoundFive(ref Case[] money, ref int[] check)
-        {
-            int startRound = 0;
-            int endRound = 3;
-        }
-        */
+
 
     }
 }
