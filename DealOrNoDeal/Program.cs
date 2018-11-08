@@ -328,7 +328,6 @@ namespace DealOrNoDeal
                 randomC[i] = temp;
             }
             Order(ref money, ref check, ref randomC);
-            DisplayAvalibleCases(ref money, ref check, ref randomC);
         }
 
         static void Order(ref Case[] money, ref int[] check, ref int[] randomC)
@@ -360,30 +359,31 @@ namespace DealOrNoDeal
             int count = 1;
             for (int i = 0; i < check.Length; i++)
             {
-                Console.WriteLine(check[i] + 1);
+                Console.WriteLine(count);
                 Console.WriteLine("{0:c}", money[randomC[i]].caseMoney);
                 count = count + 1;
             }
-            CasePick(ref money, ref check);
+            CasePick(ref money, ref check, ref randomC);
         }
 
 
-        static void CasePick(ref Case[] money, ref int[] check)
+        static void CasePick(ref Case[] money, ref int[] check, ref int[] randomC)
         {
             int caseHold;
             Console.Write("\n\nPlease pick a case number to keep: ");
             caseHold = Convert.ToInt32(Console.ReadLine());
 
             Console.WriteLine("Players case number: {0}", caseHold);
-            Console.WriteLine("Case contains: {0:c}", money[check[caseHold - 1]].caseMoney);     //users input - 1 == index in array slot
+            Console.WriteLine("Case contains: {0:c}", money[randomC[caseHold - 1]].caseMoney);     //users input - 1 == index in array slot
 
-            Del(ref money, ref check, ref caseHold);
+            Del(ref money, ref check, ref caseHold, ref randomC);
         }
 
-        static void Del(ref Case[] money, ref int[] check, ref int caseHold)
+        static void Del(ref Case[] money, ref int[] check, ref int caseHold, ref int[] randomC)
         {
             int index = 0;
-            int[] updatedList = new int[check.Length - index];
+            int resize = 26;
+            int[] updatedList = new int[check.Length];
 
             for (int i = 0; i < check.Length; i++)
             {
@@ -393,14 +393,15 @@ namespace DealOrNoDeal
                     index = index + 1;
                 }
             }
+            resize = resize - 1;
 
             Console.WriteLine("Updated List");
-            for (int i =0; i < updatedList.Length; i++)
+            for (int i = 0; i < updatedList.Length; i++)
             {
                 Console.Write((updatedList[i] + 1) + " ");
-                Array.Resize(ref updatedList, 25);
+                Array.Resize(ref updatedList, resize);
             }
-            Console.ReadLine();
+            CasePick(ref money, ref check, ref randomC);
         }
 
 
