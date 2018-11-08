@@ -369,40 +369,91 @@ namespace DealOrNoDeal
 
         static void CasePick(ref Case[] money, ref int[] check, ref int[] randomC)
         {
-            int caseHold;
+            int[] test = new int[6];
+            for (int i = 0; i < 6; i++)
+            {
+                Console.Write("\n\nEnter case: ");
+                test[i] = Convert.ToInt32(Console.ReadLine());
+            }
+            Del(ref money, ref check, ref randomC, ref test);
+            /*int caseHold;
             Console.Write("\n\nPlease pick a case number to keep: ");
             caseHold = Convert.ToInt32(Console.ReadLine());
 
             Console.WriteLine("Players case number: {0}", caseHold);
             Console.WriteLine("Case contains: {0:c}", money[randomC[caseHold - 1]].caseMoney);     //users input - 1 == index in array slot
 
-            Del(ref money, ref check, ref caseHold, ref randomC);
+            Del(ref money, ref check, ref caseHold, ref randomC);*/
         }
 
-        static void Del(ref Case[] money, ref int[] check, ref int caseHold, ref int[] randomC)
+        static void Del(ref Case[] money, ref int[] check, ref int[] randomC, ref int[] test)
         {
             int index = 0;
             int resize = 26;
+            int round = 0;
+            int count = 0;
+            int temp;
             int[] updatedList = new int[check.Length];
 
-            for (int i = 0; i < check.Length; i++)
+            do
             {
-                if (check[i] != (caseHold - 1))
+                for (int i = 0; i < check.Length; i++)
                 {
-                    updatedList[index] = check[i];
+                    temp = test[count];
+                    if (check[i] == temp)
+                    {
+                        updatedList[index] = 0;
+                    }
+                    else
+                    {
+                        updatedList[index] = check[i];
+                    }
                     index = index + 1;
+                    round = round + 1;
                 }
-            }
-            resize = resize - 1;
+                count = count + 1;
+            } while (count < test.Length);
+            //resize = resize - 1;
 
             Console.WriteLine("Updated List");
             for (int i = 0; i < updatedList.Length; i++)
             {
                 Console.Write((updatedList[i] + 1) + " ");
-                Array.Resize(ref updatedList, resize);
+                //Array.Resize(ref updatedList, 20);
             }
-            CasePick(ref money, ref check, ref randomC);
+            //CasePick(ref money, ref check, ref randomC);
+
         }
+
+        /*static void Del(ref Case[] money, ref int[] check, ref int caseHold, ref int[] randomC)
+        {
+            int index = 0;
+            int resize = 26;
+
+            int[] updatedList = new int[check.Length];
+
+                for (int i = 0; i < check.Length; i++)
+                {
+
+                        if (check[i] != (caseHold - 1))
+                        {
+                            updatedList[index] = check[i];
+                            index = index + 1;
+
+                }
+                resize = resize - 1;
+
+                Console.WriteLine("Updated List");
+                for (int i = 0; i < updatedList.Length; i++)
+                {
+                    Console.Write((updatedList[i] + 1) + " ");
+                    Array.Resize(ref updatedList, resize);
+                }
+
+                CasePick(ref money, ref check, ref randomC);
+
+
+        }*/
 
 
 
