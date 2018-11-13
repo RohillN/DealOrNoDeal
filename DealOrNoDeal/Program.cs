@@ -124,7 +124,7 @@ namespace DealOrNoDeal
                 Console.WriteLine(topTenList[i]);
             }
             //Checking if users wants to draw a winner from the topTenList
-            Console.WriteLine("\nPick a random winning player? Y/N");
+            Console.WriteLine("\nPick one random winning player? Y/N");
             string temp3 = Console.ReadLine().ToLower();
 
             if (temp3 == "y")
@@ -343,7 +343,7 @@ namespace DealOrNoDeal
                     }
                 }
             }
-            DisplayAvalibleCases(ref money, ref check, ref randomC);
+            CasePick(ref money, ref check, ref randomC);
         }
 
         public static void CaseSwap(ref int pos1, ref int pos2)
@@ -355,27 +355,22 @@ namespace DealOrNoDeal
             pos2 = temp;
         }
 
-        public static void DisplayAvalibleCases(ref Case[] money, ref int[] check, ref int[] randomC)
-        {
-            int count = 1;
-            for (int i = 0; i < check.Length; i++)
-            {
-                Console.WriteLine("{0}\t\t{1:c}\t\t\t\t{2}", count, money[randomC[i]].caseMoney, money[i].off);
-                count = count + 1;
-            }
-            CasePick(ref money, ref check, ref randomC);
-        }
-
-
         public static void CasePick(ref Case[] money, ref int[] check, ref int[] randomC)
         {
             int caseHold;
-            Console.Write("\n\nPlease pick a case number to keep: ");
+            Console.Write("\n\nPick a case from 1 - 26: ");
             caseHold = Convert.ToInt32(Console.ReadLine());
+            if (caseHold <= 0 || caseHold > 26)
+            {
+                do
+                {
+                    Console.Write("\n\n*** Invalid input! ***\nEnter a case number from 1 - 26: ");
+                    caseHold = Convert.ToInt32(Console.ReadLine());
 
-            Console.WriteLine("Players case number: {0}", caseHold);
-            Console.WriteLine("Case contains: {0:c}", money[randomC[caseHold - 1]].caseMoney);     //users input - 1 == index in array slot
+                } while (caseHold <= 0 || caseHold > 26);
+            }
 
+            money[check[caseHold - 1]].off = true;
             Hide(ref money, ref check, ref randomC, ref caseHold);
         }
 
@@ -384,14 +379,33 @@ namespace DealOrNoDeal
             bool found = false;
             int playC;
             int round = 1;
+            int end = 6;
             do
             {
-                Console.Write("\n{0} / 6: ",round);
-                Console.Write("\n\nPick Case: ");
+                for (int i = 0; i < check.Length; i++)
+                {
+                    if (money[check[i]].off == false)
+                    {
+                        Console.WriteLine("{0}".PadRight(20) + "{1:c}".PadRight(25), (money[check[i]].caseNumber + 1), money[randomC[i]].caseMoney); //Change padding distance
+                    }
+                }
+                Console.Write("\nYour case: {0}".PadLeft(10) + "| Value: {1:c}".PadLeft(15) + "\n", caseHold, money[randomC[caseHold - 1]].caseMoney); //Change padding distance
+
+                Console.Write("\n{0} / {1} Pick Case: ", round, end);
                 playC = Convert.ToInt32(Console.ReadLine());
 
+                if (playC <= 0 || playC > 26 || playC == caseHold)
+                {
+                    do
+                    {
+                        Console.Write("\n\n*** Invalid! Case has been picked ***\nEnter a case number from 1 - 26: ");
+                        playC = Convert.ToInt32(Console.ReadLine());
+                    } while (playC <= 0 || playC > 26 || playC == caseHold);
+                }
                 Console.WriteLine("Case Number: {0}", playC);
                 Console.WriteLine("Case contains: {0:c}", money[randomC[playC - 1]].caseMoney);     //users input - 1 == index in array slot
+                Console.ReadLine();
+                Console.Clear();
                 do
                 {
                     for (int i = 0; i < check.Length; i++)
@@ -405,19 +419,44 @@ namespace DealOrNoDeal
 
                 } while (found != true);
                 round = round + 1;
-            } while (round <= 6);
+            } while (round <= end);
+
+            Banker(ref money, ref check, ref randomC, ref caseHold, ref playC, ref end);
+        }
+
+        public static void Banker(ref Case[] money, ref int[] check, ref int[] randomC, ref int caseHold, ref int playC, ref int end)
+        {
+            double offer;
+            double average = 0;
+            int turn = 1;
+            string choice;
 
             for (int i = 0; i < check.Length; i++)
+            {
+                if (money[check[i]].off == false)
                 {
-                    if (money[i].off == false)
-                    {
-                        Console.WriteLine("{0}\t\t{1:c}\t\t\t\t{2}", (money[check[i]].caseNumber + 1), money[randomC[i]].caseMoney, money[i].off);
-                    }
+                    average = (average + money[check[i]].caseMoney - (caseHold - 1)) / 26;                    
                 }
+            }
+            offer = average * turn / 10;
+
+            Console.WriteLine("Banker offers: {0:c}", offer);
+            Console.Write("\n\nDeal or No Deal: ");
+            choice = Console.ReadLine().ToLower().Substring(0, 1);
+
+            if (choice == "n")
+            {
+                Console.WriteLine("No Deal!");
+                turn = turn + 1;
+                //DisplayAvalibleCases(ref money, ref check, ref randomC);
+                Hide(ref money, ref check, ref randomC, ref caseHold);
+            }
+            if (choice == "d")
+            {
+                Console.WriteLine("DEAL!!\nYou have won {0:c}", offer);
+            }
 
             Console.ReadLine();
-
-
         }
 
     }
