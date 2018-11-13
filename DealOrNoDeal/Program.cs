@@ -38,7 +38,7 @@ namespace DealOrNoDeal
             Case[] money = new Case[26];
             StudentReadList(ref student);
             SuitCaseReadList(ref money);
-            Console.WriteLine("Select 1/2/3/4\n1 = Top 10 people\n2 = Full List\n3 = Edit Play Information\n4 = Checking case number and amount");
+            Console.WriteLine("Select 1/2/3/4\n1 = Top 10 people\n2 = Full List\n3 = Edit Play Information\n4 = Game");
             int temp = Convert.ToInt32(Console.ReadLine());
 
             switch (temp)
@@ -389,37 +389,37 @@ namespace DealOrNoDeal
                         Console.WriteLine("{0}".PadRight(20) + "{1:c}".PadRight(25), (money[check[i]].caseNumber + 1), money[randomC[i]].caseMoney); //Change padding distance
                     }
                 }
-                Console.Write("\nYour case: {0}".PadLeft(10) + "| Value: {1:c}".PadLeft(15) + "\n", caseHold, money[randomC[caseHold - 1]].caseMoney); //Change padding distance
+                Console.Write("\nYour case: {0}".PadLeft(10) + "| Value: {1:c}".PadLeft(15) + "\n", caseHold, money[randomC[caseHold - 1]].caseMoney); //Change padding distance // also the value will be blanked out
 
-                Console.Write("\n{0} / {1} Pick Case: ", round, end);
-                playC = Convert.ToInt32(Console.ReadLine());
+                Console.Write("\n{0} / {1} Pick Case: ", round, end);       //Asking for players input 
+                playC = Convert.ToInt32(Console.ReadLine());               //Storing the players input and converting to int data type
 
-                if (playC <= 0 || playC > 26 || playC == caseHold)
+                if (playC <= 0 || playC > 26 || playC == caseHold)         //Checking for users input // if its in range 
                 {
                     do
                     {
                         Console.Write("\n\n*** Invalid! Case has been picked ***\nEnter a case number from 1 - 26: ");
                         playC = Convert.ToInt32(Console.ReadLine());
-                    } while (playC <= 0 || playC > 26 || playC == caseHold);
+                    } while (playC <= 0 || playC > 26 || playC == caseHold);        //Do it while the users input is incorrect
                 }
-                Console.WriteLine("Case Number: {0}", playC);
+                Console.WriteLine("Case Number: {0}", playC);                                       //Display the case number and value of the case amount
                 Console.WriteLine("Case contains: {0:c}", money[randomC[playC - 1]].caseMoney);     //users input - 1 == index in array slot
                 Console.ReadLine();
                 Console.Clear();
                 do
                 {
-                    for (int i = 0; i < check.Length; i++)
+                    for (int i = 0; i < check.Length; i++)          //Checking through the lenght of check array
                     {
-                        if (check[i] == (playC - 1))
+                        if (check[i] == (playC - 1))               //Checking if users input is inside check array
                         {
-                            found = true;
-                            money[check[playC - 1]].off = true;
+                            found = true;                          //If users input is inside array found will = true
+                            money[check[playC - 1]].off = true;    //Case struct "off" will equal true
                         }
                     }
 
-                } while (found != true);
+                } while (found != true);                        //Keep checking thought if users input is in the array // until found is not true
                 round = round + 1;
-            } while (round <= end);
+            } while (round <= end);                             //Do this whole method till round is less that end
 
             Banker(ref money, ref check, ref randomC, ref caseHold, ref playC, ref end);
         }
@@ -448,7 +448,6 @@ namespace DealOrNoDeal
             {
                 Console.WriteLine("No Deal!");
                 turn = turn + 1;
-                //DisplayAvalibleCases(ref money, ref check, ref randomC);
                 Hide(ref money, ref check, ref randomC, ref caseHold);
             }
             if (choice == "d")
