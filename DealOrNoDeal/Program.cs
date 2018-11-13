@@ -12,6 +12,7 @@ namespace DealOrNoDeal
     {
         public int caseNumber;
         public int caseMoney;
+        public bool off;
     }
 
     public struct Players
@@ -30,7 +31,7 @@ namespace DealOrNoDeal
 
         public static Random rand = new Random();
 
-        static void Menu()
+        public static void Menu()
         {
             IntroText();
             Players[] student = new Players[21];
@@ -63,7 +64,7 @@ namespace DealOrNoDeal
             }
             Console.ReadLine();
         }
-        static void IntroText()
+        public static void IntroText()
         {
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine(@"'||''|.                   '||   ..|''||           '|.   '|'         '||''|.                   '||  ");
@@ -76,7 +77,7 @@ namespace DealOrNoDeal
 
         }
 
-        static void CheckDuplicatePlayers(ref Players[] student)
+        public static void CheckDuplicatePlayers(ref Players[] student)
         {
             //Checking for repeating numbers up to 10
             int[] select = new int[10];
@@ -107,7 +108,7 @@ namespace DealOrNoDeal
 
         }
 
-        static void PickTen(ref Players[] student, ref int[] select)
+        public static void PickTen(ref Players[] student, ref int[] select)
         {
             //Displaying top 10 and putting in a topTenList array
             string[] topTenList = new string[10];
@@ -138,7 +139,7 @@ namespace DealOrNoDeal
 
         }
 
-        static void PickOne(ref string[] topTenList)
+        public static void PickOne(ref string[] topTenList)
         {
             int i = rand.Next(0, 10);
 
@@ -147,7 +148,7 @@ namespace DealOrNoDeal
             Console.ReadLine();
         }
 
-        static void StudentReadList(ref Players[] student)
+        public static void StudentReadList(ref Players[] student)
         {
             StreamReader sr = new StreamReader("DealOrNoDeal.txt");
             int count = 0;
@@ -162,7 +163,7 @@ namespace DealOrNoDeal
 
             sr.Close();
         }
-        static void ClassSort(ref Players[] student)
+        public static void ClassSort(ref Players[] student)
         {
 
             for (int i = 0; i < student.Length - 1; i++)
@@ -177,7 +178,7 @@ namespace DealOrNoDeal
             }
         }
 
-        static void ClassSwap(ref Players pos1, ref Players pos2)
+        public static void ClassSwap(ref Players pos1, ref Players pos2)
         {
             Players temp;
 
@@ -186,7 +187,7 @@ namespace DealOrNoDeal
             pos2 = temp;
         }
 
-        static void Display(ref Players[] student)
+        public static void Display(ref Players[] student)
         {
             int count = 0;
             Console.WriteLine("First Name".PadRight(15) + "Last Name".PadRight(15) + "Interest".PadRight(15) + "\n");
@@ -199,7 +200,7 @@ namespace DealOrNoDeal
 
         }
 
-        static void EditStudents(ref Players[] student)
+        public static void EditStudents(ref Players[] student)
         {
             ClassSort(ref student);
             Display(ref student);
@@ -227,8 +228,8 @@ namespace DealOrNoDeal
                         found = true;
                         do
                         {
-                            Console.WriteLine("You have picked: " + student[i].firstName);
-                            Console.WriteLine("What would you like to edit? \n1. First Name\n2. Last Name\n3. Interest\n4. All of the above");
+                            Console.WriteLine("You have picked: " + student[i].firstName + " " + student[i].lastName);
+                            Console.WriteLine("\nWhat would you like to edit? \n1. First Name\n2. Last Name\n3. Interest\n4. All of the above");
                             int sectionPick = Convert.ToInt32(Console.ReadLine());
 
                             switch (sectionPick)
@@ -285,7 +286,7 @@ namespace DealOrNoDeal
 
         }
 
-        static void SuitCaseReadList(ref Case[] money)
+        public static void SuitCaseReadList(ref Case[] money)
         {
             StreamReader sr = new StreamReader("TestCase.txt");
             int count = 0;
@@ -299,7 +300,7 @@ namespace DealOrNoDeal
 
             sr.Close();
         }
-        static void CheckDuplicateCaseMoney(ref Case[] money)
+        public static void CheckDuplicateCaseMoney(ref Case[] money)
         {
             //Checking for repeating numbers up to 26
             int[] check = new int[26];
@@ -330,7 +331,7 @@ namespace DealOrNoDeal
             Order(ref money, ref check, ref randomC);
         }
 
-        static void Order(ref Case[] money, ref int[] check, ref int[] randomC)
+        public static void Order(ref Case[] money, ref int[] check, ref int[] randomC)
         {
             for (int i = 0; i < check.Length - 1; i++)
             {
@@ -345,7 +346,7 @@ namespace DealOrNoDeal
             DisplayAvalibleCases(ref money, ref check, ref randomC);
         }
 
-        static void CaseSwap(ref int pos1, ref int pos2)
+        public static void CaseSwap(ref int pos1, ref int pos2)
         {
             int temp;
 
@@ -354,108 +355,70 @@ namespace DealOrNoDeal
             pos2 = temp;
         }
 
-        static void DisplayAvalibleCases(ref Case[] money, ref int[] check, ref int[] randomC)
+        public static void DisplayAvalibleCases(ref Case[] money, ref int[] check, ref int[] randomC)
         {
             int count = 1;
             for (int i = 0; i < check.Length; i++)
             {
-                Console.WriteLine(count);
-                Console.WriteLine("{0:c}", money[randomC[i]].caseMoney);
+                Console.WriteLine("{0}\t\t{1:c}\t\t\t\t{2}", count, money[randomC[i]].caseMoney, money[i].off);
                 count = count + 1;
             }
             CasePick(ref money, ref check, ref randomC);
         }
 
 
-        static void CasePick(ref Case[] money, ref int[] check, ref int[] randomC)
+        public static void CasePick(ref Case[] money, ref int[] check, ref int[] randomC)
         {
-            int[] test = new int[6];
-            for (int i = 0; i < 6; i++)
-            {
-                Console.Write("\n\nEnter case: ");
-                test[i] = Convert.ToInt32(Console.ReadLine());
-            }
-            Del(ref money, ref check, ref randomC, ref test);
-            /*int caseHold;
+            int caseHold;
             Console.Write("\n\nPlease pick a case number to keep: ");
             caseHold = Convert.ToInt32(Console.ReadLine());
 
             Console.WriteLine("Players case number: {0}", caseHold);
             Console.WriteLine("Case contains: {0:c}", money[randomC[caseHold - 1]].caseMoney);     //users input - 1 == index in array slot
 
-            Del(ref money, ref check, ref caseHold, ref randomC);*/
+            Hide(ref money, ref check, ref randomC, ref caseHold);
         }
 
-        static void Del(ref Case[] money, ref int[] check, ref int[] randomC, ref int[] test)
+        public static void Hide(ref Case[] money, ref int[] check, ref int[] randomC, ref int caseHold)
         {
-            int index = 0;
-            int resize = 26;
-            int round = 0;
-            int count = 0;
-            int temp;
-            int[] updatedList = new int[check.Length];
-
+            bool found = false;
+            int playC;
+            int round = 1;
             do
             {
-                for (int i = 0; i < check.Length; i++)
-                {
-                    temp = test[count];
-                    if (check[i] == temp)
-                    {
-                        updatedList[index] = 0;
-                    }
-                    else
-                    {
-                        updatedList[index] = check[i];
-                    }
-                    index = index + 1;
-                    round = round + 1;
-                }
-                count = count + 1;
-            } while (count < test.Length);
-            //resize = resize - 1;
+                Console.Write("\n{0} / 6: ",round);
+                Console.Write("\n\nPick Case: ");
+                playC = Convert.ToInt32(Console.ReadLine());
 
-            Console.WriteLine("Updated List");
-            for (int i = 0; i < updatedList.Length; i++)
-            {
-                Console.Write((updatedList[i] + 1) + " ");
-                //Array.Resize(ref updatedList, 20);
-            }
-            //CasePick(ref money, ref check, ref randomC);
+                Console.WriteLine("Case Number: {0}", playC);
+                Console.WriteLine("Case contains: {0:c}", money[randomC[playC - 1]].caseMoney);     //users input - 1 == index in array slot
+                do
+                {
+                    for (int i = 0; i < check.Length; i++)
+                    {
+                        if (check[i] == (playC - 1))
+                        {
+                            found = true;
+                            money[check[playC - 1]].off = true;
+                        }
+                    }
+
+                } while (found != true);
+                round = round + 1;
+            } while (round <= 6);
+
+            for (int i = 0; i < check.Length; i++)
+                {
+                    if (money[i].off == false)
+                    {
+                        Console.WriteLine("{0}\t\t{1:c}\t\t\t\t{2}", (money[check[i]].caseNumber + 1), money[randomC[i]].caseMoney, money[i].off);
+                    }
+                }
+
+            Console.ReadLine();
+
 
         }
-
-        /*static void Del(ref Case[] money, ref int[] check, ref int caseHold, ref int[] randomC)
-        {
-            int index = 0;
-            int resize = 26;
-
-            int[] updatedList = new int[check.Length];
-
-                for (int i = 0; i < check.Length; i++)
-                {
-
-                        if (check[i] != (caseHold - 1))
-                        {
-                            updatedList[index] = check[i];
-                            index = index + 1;
-
-                }
-                resize = resize - 1;
-
-                Console.WriteLine("Updated List");
-                for (int i = 0; i < updatedList.Length; i++)
-                {
-                    Console.Write((updatedList[i] + 1) + " ");
-                    Array.Resize(ref updatedList, resize);
-                }
-
-                CasePick(ref money, ref check, ref randomC);
-
-
-        }*/
-
-
 
     }
 }
