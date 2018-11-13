@@ -380,6 +380,7 @@ namespace DealOrNoDeal
             int playC;
             int round = 1;
             int end = 6;
+
             do
             {
                 for (int i = 0; i < check.Length; i++)
@@ -421,10 +422,11 @@ namespace DealOrNoDeal
                 round = round + 1;
             } while (round <= end);                             //Do this whole method till round is less that end
 
-            Banker(ref money, ref check, ref randomC, ref caseHold, ref playC, ref end);
+            Banker(ref money, ref check, ref randomC, ref caseHold, ref playC);
         }
 
-        public static void Banker(ref Case[] money, ref int[] check, ref int[] randomC, ref int caseHold, ref int playC, ref int end)
+
+        public static void Banker(ref Case[] money, ref int[] check, ref int[] randomC, ref int caseHold, ref int playC)
         {
             double offer;
             double average = 0;
@@ -435,9 +437,10 @@ namespace DealOrNoDeal
             {
                 if (money[check[i]].off == false)
                 {
-                    average = (average + money[check[i]].caseMoney - (caseHold - 1)) / 26;                    
+                    average = (average + money[check[i]].caseMoney - (money[caseHold - 1].caseMoney)) / 26;
                 }
             }
+            turn = turn + 1;
             offer = average * turn / 10;
 
             Console.WriteLine("Banker offers: {0:c}", offer);
@@ -447,7 +450,6 @@ namespace DealOrNoDeal
             if (choice == "n")
             {
                 Console.WriteLine("No Deal!");
-                turn = turn + 1;
                 Hide(ref money, ref check, ref randomC, ref caseHold);
             }
             if (choice == "d")
