@@ -382,13 +382,7 @@ namespace DealOrNoDeal
 
             do
             {
-                for (int i = 0; i < check.Length; i++)
-                {
-                    if (money[check[i]].off == false)
-                    {
-                        Console.WriteLine("{0}".PadRight(20) + "{1:c}".PadRight(25), (money[check[i]].caseNumber + 1), money[randomC[i]].caseMoney); //Change padding distance
-                    }
-                }
+                GameDisplay(ref money, ref check, ref randomC, ref caseHold);
                 Console.Write("\nYour case: {0}".PadLeft(10) + "| Value: {1:c}".PadLeft(15) + "\n", caseHold, money[randomC[caseHold - 1]].caseMoney); //Change padding distance // also the value will be blanked out
 
                 Console.Write("\n{0} / {1} Pick Case: ", round, end);       //Asking for players input 
@@ -413,7 +407,11 @@ namespace DealOrNoDeal
                         if (check[i] == (playC - 1))               //Checking if users input is inside check array
                         {
                             found = true;                          //If users input is inside array found will = true
-                            money[check[playC - 1]].off = true;    //Case struct "off" will equal true
+                            money[randomC[playC - 1]].off = true;    //Case struct "off" will equal true
+                        }
+                        else
+                        {
+                            Console.WriteLine(" ");
                         }
                     }
 
@@ -422,6 +420,21 @@ namespace DealOrNoDeal
             } while (round <= end);                             //Do this whole method till round is less that end
             end = end - 1;
             Banker(ref money, ref check, ref randomC, ref caseHold, ref playC);
+        }
+
+        public static void GameDisplay(ref Case[] money, ref int[] check, ref int[] randomC, ref int caseHold)
+        {
+            for (int i = 0; i < check.Length; i++)
+            {
+                if (money[check[i]].off == false)
+                {
+                    Console.WriteLine("{0}".PadRight(20) + "{1:c}".PadRight(25), (money[check[i]].caseNumber + 1), money[randomC[i]].caseMoney); //Change padding distance
+                }
+                else
+                {
+                    Console.WriteLine("");
+                }
+            }
         }
 
         public static void Banker(ref Case[] money, ref int[] check, ref int[] randomC, ref int caseHold, ref int playC)
