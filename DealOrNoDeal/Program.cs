@@ -28,7 +28,7 @@ namespace DealOrNoDeal
         {
             Menu();
         }
-
+        private static int end = 6;
         public static Random rand = new Random();
 
         public static void Menu()
@@ -379,7 +379,6 @@ namespace DealOrNoDeal
             bool found = false;
             int playC;
             int round = 1;
-            int end = 6;
 
             do
             {
@@ -421,10 +420,9 @@ namespace DealOrNoDeal
                 } while (found != true);                        //Keep checking thought if users input is in the array // until found is not true
                 round = round + 1;
             } while (round <= end);                             //Do this whole method till round is less that end
-
+            end = end - 1;
             Banker(ref money, ref check, ref randomC, ref caseHold, ref playC);
         }
-
 
         public static void Banker(ref Case[] money, ref int[] check, ref int[] randomC, ref int caseHold, ref int playC)
         {
@@ -459,6 +457,5 @@ namespace DealOrNoDeal
 
             Console.ReadLine();
         }
-
     }
 }
