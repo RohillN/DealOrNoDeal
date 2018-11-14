@@ -8,11 +8,18 @@ using System.Threading;
 
 namespace DealOrNoDeal
 {
-    public struct Case
+    public struct UnRandCase
     {
         public int caseNumber;
         public int caseMoney;
-        public bool off;
+        public bool off;    //Default booling == false
+    }
+
+    public struct RandCase
+    {
+        public int caseNumberR;
+        public int caseMoneyR;
+        public bool offR;   //Dedault booling == false
     }
 
     public struct Players
@@ -35,9 +42,10 @@ namespace DealOrNoDeal
         {
             IntroText();
             Players[] student = new Players[21];
-            Case[] money = new Case[26];
+            UnRandCase[] money = new UnRandCase[26];
+            RandCase[] moneyR = new RandCase[26];
             StudentReadList(ref student);
-            SuitCaseReadList(ref money);
+            SuitCaseReadListUnRand(ref money);
             Console.WriteLine("Select 1/2/3/4\n1 = Top 10 people\n2 = Full List\n3 = Edit Play Information\n4 = Game");
             int temp = Convert.ToInt32(Console.ReadLine());
 
@@ -59,7 +67,7 @@ namespace DealOrNoDeal
                     break;
                 case 4:
                     Console.WriteLine("Switch Case 4");
-                    CheckDuplicateCaseMoney(ref money);
+                    CheckDuplicateCaseMoney(ref money, ref moneyR);
                     break;
             }
             Console.ReadLine();
@@ -286,7 +294,7 @@ namespace DealOrNoDeal
 
         }
 
-        public static void SuitCaseReadList(ref Case[] money)
+        public static void SuitCaseReadListUnRand(ref UnRandCase[] money)
         {
             StreamReader sr = new StreamReader("TestCase.txt");
             int count = 0;
@@ -300,7 +308,22 @@ namespace DealOrNoDeal
 
             sr.Close();
         }
-        public static void CheckDuplicateCaseMoney(ref Case[] money)
+
+        public static void SuitCaseReadListRand(ref RandCase[] moneyR, ref int[] randomC)
+        {
+            StreamReader sr = new StreamReader("TestCase.txt");
+            int count = 0;
+            do
+            {
+                moneyR[randomC[count]].caseNumberR = Convert.ToInt32(sr.ReadLine());
+                moneyR[randomC[count]].caseMoneyR = Convert.ToInt32(sr.ReadLine());
+                count = count + 1;
+
+            } while (count < moneyR.Length);
+
+            sr.Close();
+        }
+        public static void CheckDuplicateCaseMoney(ref UnRandCase[] money, ref RandCase[] moneyR)
         {
             //Checking for repeating numbers up to 26
             int[] check = new int[26];
@@ -328,10 +351,11 @@ namespace DealOrNoDeal
                 check[i] = temp;
                 randomC[i] = temp;
             }
-            Order(ref money, ref check, ref randomC);
+            SuitCaseReadListRand(ref moneyR, ref randomC);
+            Order(ref money, ref moneyR, ref check, ref randomC);
         }
 
-        public static void Order(ref Case[] money, ref int[] check, ref int[] randomC)
+        public static void Order(ref UnRandCase[] money, ref RandCase[] moneyR, ref int[] check, ref int[] randomC)
         {
             for (int i = 0; i < check.Length - 1; i++)
             {
@@ -343,7 +367,7 @@ namespace DealOrNoDeal
                     }
                 }
             }
-            CasePick(ref money, ref check, ref randomC);
+            CasePick(ref money, ref moneyR, ref check, ref randomC);
         }
 
         public static void CaseSwap(ref int pos1, ref int pos2)
@@ -355,7 +379,7 @@ namespace DealOrNoDeal
             pos2 = temp;
         }
 
-        public static void CasePick(ref Case[] money, ref int[] check, ref int[] randomC)
+        public static void CasePick(ref UnRandCase[] money, ref RandCase[] moneyR, ref int[] check, ref int[] randomC)
         {
             int caseHold;
             Console.Write("\n\nPick a case from 1 - 26: ");
@@ -370,19 +394,18 @@ namespace DealOrNoDeal
                 } while (caseHold <= 0 || caseHold > 26);
             }
 
-            money[check[caseHold - 1]].off = true;
-            Hide(ref money, ref check, ref randomC, ref caseHold);
+            Hide(ref money, ref moneyR, ref check, ref randomC, ref caseHold);
         }
 
-        public static void Hide(ref Case[] money, ref int[] check, ref int[] randomC, ref int caseHold)
+        public static void Hide(ref UnRandCase[] money, ref RandCase[] moneyR, ref int[] check, ref int[] randomC, ref int caseHold)
         {
             bool found = false;
             int playC;
             int round = 1;
-
+            money[randomC[check[caseHold - 1]]].off = true;
             do
             {
-                GameDisplay(ref money, ref check, ref randomC, ref caseHold);
+                GameDisplay(ref money, ref moneyR, ref check, ref randomC, ref caseHold);
                 Console.Write("\nYour case: {0}".PadLeft(10) + "| Value: {1:c}".PadLeft(15) + "\n", caseHold, money[randomC[caseHold - 1]].caseMoney); //Change padding distance // also the value will be blanked out
 
                 Console.Write("\n{0} / {1} Pick Case: ", round, end);       //Asking for players input 
@@ -397,38 +420,34 @@ namespace DealOrNoDeal
                     } while (playC <= 0 || playC > 26 || playC == caseHold);        //Do it while the users input is incorrect
                 }
                 Console.WriteLine("Case Number: {0}", playC);                                       //Display the case number and value of the case amount
-                Console.WriteLine("Case contains: {0:c}", money[randomC[playC - 1]].caseMoney);     //users input - 1 == index in array slot
+                Console.WriteLine("Case contains: {0:c}", moneyR[playC - 1].caseMoneyR);     //users input - 1 == index in array slot
                 Console.ReadLine();
                 Console.Clear();
                 do
                 {
-                    for (int i = 0; i < check.Length; i++)          //Checking through the lenght of check array
+                    for (int i = 0; i < randomC.Length; i++)          //Checking through the lenght of check array
                     {
                         if (check[i] == (playC - 1))               //Checking if users input is inside check array
                         {
+                            //money[check[i]].off = true;
                             found = true;                          //If users input is inside array found will = true
-                            money[randomC[playC - 1]].off = true;    //Case struct "off" will equal true
-                        }
-                        else
-                        {
-                            Console.WriteLine(" ");
+                            money[randomC[check[playC - 1]]].off = true;    //Case struct "off" will equal true
                         }
                     }
-
                 } while (found != true);                        //Keep checking thought if users input is in the array // until found is not true
                 round = round + 1;
             } while (round <= end);                             //Do this whole method till round is less that end
             end = end - 1;
-            Banker(ref money, ref check, ref randomC, ref caseHold, ref playC);
+            Banker(ref money, ref moneyR, ref check, ref randomC, ref caseHold, ref playC);
         }
 
-        public static void GameDisplay(ref Case[] money, ref int[] check, ref int[] randomC, ref int caseHold)
+        public static void GameDisplay(ref UnRandCase[] money, ref RandCase[] moneyR, ref int[] check, ref int[] randomC, ref int caseHold)
         {
             for (int i = 0; i < check.Length; i++)
             {
                 if (money[check[i]].off == false)
                 {
-                    Console.WriteLine("{0}".PadRight(20) + "{1:c}".PadRight(25), (money[check[i]].caseNumber + 1), money[randomC[i]].caseMoney); //Change padding distance
+                    Console.WriteLine("{0}".PadRight(20) + "{1:c}".PadRight(25).PadRight(25), (i + 1), money[check[i]].caseMoney); //Change padding distance
                 }
                 else
                 {
@@ -437,7 +456,7 @@ namespace DealOrNoDeal
             }
         }
 
-        public static void Banker(ref Case[] money, ref int[] check, ref int[] randomC, ref int caseHold, ref int playC)
+        public static void Banker(ref UnRandCase[] money, ref RandCase[] moneyR, ref int[] check, ref int[] randomC, ref int caseHold, ref int playC)
         {
             double offer;
             double average = 0;
@@ -448,7 +467,7 @@ namespace DealOrNoDeal
             {
                 if (money[check[i]].off == false)
                 {
-                    average = (average + money[check[i]].caseMoney - (money[caseHold - 1].caseMoney)) / 26;
+                    average = (average + money[check[i]].caseMoney) / 26;
                 }
             }
             turn = turn + 1;
@@ -461,7 +480,7 @@ namespace DealOrNoDeal
             if (choice == "n")
             {
                 Console.WriteLine("No Deal!");
-                Hide(ref money, ref check, ref randomC, ref caseHold);
+                Hide(ref money, ref moneyR, ref check, ref randomC, ref caseHold);
             }
             if (choice == "d")
             {
