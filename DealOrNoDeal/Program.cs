@@ -315,7 +315,7 @@ namespace DealOrNoDeal
             int count = 0;
             do
             {
-                moneyR[randomC[count]].caseNumberR = Convert.ToInt32(sr.ReadLine());
+                moneyR[count].caseNumberR = Convert.ToInt32(sr.ReadLine());
                 moneyR[randomC[count]].caseMoneyR = Convert.ToInt32(sr.ReadLine());
                 count = count + 1;
 
@@ -402,7 +402,24 @@ namespace DealOrNoDeal
             bool found = false;
             int playC;
             int round = 1;
-            money[randomC[check[caseHold - 1]]].off = true;
+
+            for (int i = 0; i < moneyR.Length; i++)
+            {
+                if (moneyR[i].caseNumberR == (caseHold - 1))
+                {
+                    moneyR[i].offR = true;
+                }
+
+                for (int j = 0; j < i; j++)
+                {
+                    if (money[caseHold - 1].caseMoney == moneyR[j].caseMoneyR)
+                    {
+                        money[j].off = true;
+                    }
+
+                }
+
+            }
             do
             {
                 GameDisplay(ref money, ref moneyR, ref check, ref randomC, ref caseHold);
@@ -425,14 +442,23 @@ namespace DealOrNoDeal
                 Console.Clear();
                 do
                 {
-                    for (int i = 0; i < randomC.Length; i++)          //Checking through the lenght of check array
+                    for (int i = 0; i < moneyR.Length; i++)
                     {
-                        if (check[i] == (playC - 1))               //Checking if users input is inside check array
+                        if (moneyR[i].caseNumberR == (playC - 1))
                         {
-                            //money[check[i]].off = true;
-                            found = true;                          //If users input is inside array found will = true
-                            money[randomC[check[playC - 1]]].off = true;    //Case struct "off" will equal true
+                            found = true;
+                            moneyR[i].offR = true;
+
                         }
+                        for (int j = 0; j < i; j++)
+                        {
+                            if (moneyR[playC - 1].caseMoneyR == money[j].caseMoney)
+                            {
+                                found = true;
+                                money[playC - 1].off = true;
+                            }
+                        }
+
                     }
                 } while (found != true);                        //Keep checking thought if users input is in the array // until found is not true
                 round = round + 1;
@@ -443,51 +469,62 @@ namespace DealOrNoDeal
 
         public static void GameDisplay(ref UnRandCase[] money, ref RandCase[] moneyR, ref int[] check, ref int[] randomC, ref int caseHold)
         {
-            for (int i = 0; i < check.Length; i++)
+            for (int i = 0; i < 26; i++)
             {
-                if (money[check[i]].off == false)
+                if (moneyR[i].offR == false)
                 {
-                    Console.WriteLine("{0}".PadRight(20) + "{1:c}".PadRight(25).PadRight(25), (i + 1), money[check[i]].caseMoney); //Change padding distance
+                    Console.WriteLine("{0}".PadRight(20), (moneyR[i].caseNumberR + 1)); //Change padding distance
                 }
                 else
                 {
                     Console.WriteLine("");
                 }
-            }
-        }
 
-        public static void Banker(ref UnRandCase[] money, ref RandCase[] moneyR, ref int[] check, ref int[] randomC, ref int caseHold, ref int playC)
-        {
-            double offer;
-            double average = 0;
-            int turn = 1;
-            string choice;
-
-            for (int i = 0; i < check.Length; i++)
-            {
-                if (money[check[i]].off == false)
+                for (int j = 0; j < 26; j++)
                 {
-                    average = (average + money[check[i]].caseMoney) / 26;
+                    if (money[i].off == false)
+                    {
+                        Console.WriteLine("{0:c}".PadLeft(50), money[i].caseMoney);
+                    }
                 }
+                
             }
-            turn = turn + 1;
-            offer = average * turn / 10;
-
-            Console.WriteLine("Banker offers: {0:c}", offer);
-            Console.Write("\n\nDeal or No Deal: ");
-            choice = Console.ReadLine().ToLower().Substring(0, 1);
-
-            if (choice == "n")
-            {
-                Console.WriteLine("No Deal!");
-                Hide(ref money, ref moneyR, ref check, ref randomC, ref caseHold);
-            }
-            if (choice == "d")
-            {
-                Console.WriteLine("DEAL!!\nYou have won {0:c}", offer);
-            }
-
-            Console.ReadLine();
         }
+    }
+}
+
+public static void Banker(ref UnRandCase[] money, ref RandCase[] moneyR, ref int[] check, ref int[] randomC, ref int caseHold, ref int playC)
+{
+    double offer;
+    double average = 0;
+    int turn = 1;
+    string choice;
+
+    for (int i = 0; i < check.Length; i++)
+    {
+        if (money[check[i]].off == false)
+        {
+            average = (average + money[check[i]].caseMoney) / 26;
+        }
+    }
+    turn = turn + 1;
+    offer = average * turn / 10;
+
+    Console.WriteLine("Banker offers: {0:c}", offer);
+    Console.Write("\n\nDeal or No Deal: ");
+    choice = Console.ReadLine().ToLower().Substring(0, 1);
+
+    if (choice == "n")
+    {
+        Console.WriteLine("No Deal!");
+        Hide(ref money, ref moneyR, ref check, ref randomC, ref caseHold);
+    }
+    if (choice == "d")
+    {
+        Console.WriteLine("DEAL!!\nYou have won {0:c}", offer);
+    }
+
+    Console.ReadLine();
+}
     }
 }
