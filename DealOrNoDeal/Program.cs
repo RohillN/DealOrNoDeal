@@ -28,7 +28,7 @@ namespace DealOrNoDeal
         {
             Menu();
         }
-        private static int end = 6, turn = 1;
+        private static int end = 6;
         public static Random rand = new Random();
 
         public static void Menu()
@@ -160,7 +160,7 @@ namespace DealOrNoDeal
                 student[count].interest = sr.ReadLine();
                 count = count + 1;
 
-            } while (count < student.Length);
+            } while (!sr.EndOfStream);
 
             sr.Close();
         }
@@ -208,7 +208,7 @@ namespace DealOrNoDeal
             bool found = false;
             bool invalidSectionPick = false;
             int attempt = 0;
-            Console.Write("\nWho do you want to edit: ");
+            Console.Write("\nEnter LAST name\nWho do you want to edit: ");
             string wanted = Console.ReadLine().ToLower();
             do
             {
@@ -224,13 +224,13 @@ namespace DealOrNoDeal
 
                 for (int i = 0; i < student.Length; i++)
                 {
-                    if (student[i].firstName.ToLower() == wanted)
+                    if (student[i].lastName.ToLower() == wanted)
                     {
                         found = true;
                         do
                         {
-                            Console.WriteLine("You have picked: " + student[i].firstName + " " + student[i].lastName);
-                            Console.WriteLine("\nWhat would you like to edit? \n1. First Name\n2. Last Name\n3. Interest\n4. All of the above");
+                            Console.Write("\nYou have picked: " + student[i].firstName + " " + student[i].lastName + "\n");
+                            Console.Write("\n\nPick a NUMBER equivalent\nWhat would you like to edit? \n1. First Name\n2. Last Name\n3. Interest\n4. All of the above\n5. Exit\n\nEnter Here:");
                             int sectionPick = Convert.ToInt32(Console.ReadLine());
 
                             switch (sectionPick)
@@ -238,16 +238,19 @@ namespace DealOrNoDeal
                                 case 1:
                                     Console.Write("\nEnter new first name: ");
                                     student[i].firstName = Console.ReadLine();
+                                    WriteNewList(ref student);
                                     invalidSectionPick = false;
                                     break;
                                 case 2:
                                     Console.Write("\nEnter new last name: ");
                                     student[i].lastName = Console.ReadLine();
+                                    WriteNewList(ref student);
                                     invalidSectionPick = false;
                                     break;
                                 case 3:
                                     Console.Write("\nEnter new interest: ");
                                     student[i].interest = Console.ReadLine();
+                                    WriteNewList(ref student);
                                     invalidSectionPick = false;
                                     break;
                                 case 4:
@@ -257,7 +260,13 @@ namespace DealOrNoDeal
                                     student[i].lastName = Console.ReadLine();
                                     Console.Write("\nEnter new interest: ");
                                     student[i].interest = Console.ReadLine();
+                                    WriteNewList(ref student);
                                     invalidSectionPick = false;
+                                    break;
+                                case 5:
+                                    StudentReadList(ref student);
+                                    Console.Clear();
+                                    Menu();
                                     break;
                                 default:
                                     invalidSectionPick = true;
@@ -271,19 +280,41 @@ namespace DealOrNoDeal
                             }
                             else
                             {
-                                Console.WriteLine("Do you want to see the updated list? Y/N");
+                                Console.Write("\nDo you want to see the updated list? Y/N: ");
                                 string update = Console.ReadLine().ToLower();
 
                                 if (update == "y")
                                 {
+                                    Console.Clear();
                                     Display(ref student);
+                                    Console.Write("\nPress ENTER to retrun to menu");
+                                    Console.ReadLine();
+                                    Console.Clear();
+                                    Menu();
                                 }
                             }
+
                         } while (invalidSectionPick == true);
                     }
 
                 }
             } while (found == false);
+
+        }
+
+        public static void WriteNewList(ref Players[] student)
+        {
+            StreamWriter sw = new StreamWriter("DealOrNoDeal.txt");
+            int count = 0;
+            do
+            {
+                sw.WriteLine(student[count].firstName);
+                sw.WriteLine(student[count].lastName);
+                sw.WriteLine(student[count].interest);
+                count = count + 1;
+            } while (count < student.Length);
+
+            sw.Close();
 
         }
 
@@ -297,7 +328,7 @@ namespace DealOrNoDeal
                 money[count].caseMoney = Convert.ToInt32(sr.ReadLine());
                 count = count + 1;
 
-            } while (count < money.Length);
+            } while (!sr.EndOfStream);
 
             sr.Close();
         }
@@ -359,7 +390,7 @@ namespace DealOrNoDeal
         public static void CasePick(ref Case[] money, ref int[] check, ref int[] randomC)
         {
             int caseHold;
-            Console.Write("\n\nPick a case from 1 - 26: ");
+            Console.Write("Pick a case from 1 - 26: ");
             caseHold = Convert.ToInt32(Console.ReadLine());
             if (caseHold <= 0 || caseHold > 26)
             {
@@ -383,19 +414,44 @@ namespace DealOrNoDeal
             do
             {
                 GameDisplay(ref money, ref check, ref randomC, ref caseHold);
-                Console.Write("\n\n\n\nYour case: {0}".PadLeft(30) + "| Value: {1:c}".PadLeft(15) + "\n", caseHold, money[randomC[caseHold - 1]].caseMoney); //Change padding distance // also the value will be blanked out
+                Console.Write("\n\n\nYour case: {0}".PadLeft(30) + "| Value: {1:c}".PadLeft(15) + "\n", caseHold, money[randomC[caseHold - 1]].caseMoney); //Change padding distance // also the value will be blanked out
 
                 Console.Write("\n{0} / {1} Pick Case: ", round, end);       //Asking for players input 
                 playC = Convert.ToInt32(Console.ReadLine());               //Storing the players input and converting to int data type
 
-                if (playC <= 0 || playC > 26 || playC == caseHold)         //Checking for users input // if its in range 
+                for (int i = 0; i < money.Length; i++)
                 {
                     do
                     {
-                        Console.Write("\n\n*** Invalid! Case has been picked ***\nEnter a case number from 1 - 26: ");
+                        if (money[playC - 1].off == true)
+                        {
+                            Console.Write("\n\n*** Case has already been picked ***\nEnter a case number from 1 - 26: ");
+                            playC = Convert.ToInt32(Console.ReadLine());
+                            Console.Clear();
+                            GameDisplay(ref money, ref check, ref randomC, ref caseHold);
+                        }
+                    } while (money[i].off == true);
+                } 
+
+                do
+                {
+                    if (playC <= 0 || playC > 26)
+                    {
+                        Console.Write("\n\n*** Invalid! Case is out of range ***\nEnter a case number from 1 - 26: ");
                         playC = Convert.ToInt32(Console.ReadLine());
-                    } while (playC <= 0 || playC > 26 || playC == caseHold);        //Do it while the users input is incorrect
-                }
+                        Console.Clear();
+                        GameDisplay(ref money, ref check, ref randomC, ref caseHold);
+                    }
+
+                    if (playC == caseHold)
+                    {
+                        Console.Write("\n\n*** Case has already been picked ***\nEnter a case number from 1 - 26: ");
+                        playC = Convert.ToInt32(Console.ReadLine());
+                        Console.Clear();
+                        GameDisplay(ref money, ref check, ref randomC, ref caseHold);
+                    }
+                } while (playC <= 0 || playC > 26 || playC == caseHold);
+
                 Console.Write("\n\nCase Number: {0}", playC);                                       //Display the case number and value of the case amount
                 Console.Write("\n\nCase contains: {0:c}", money[randomC[playC - 1]].caseMoney);     //users input - 1 == index in array slot
                 Console.ReadLine();
@@ -452,7 +508,7 @@ namespace DealOrNoDeal
                 }
             }
 
-            offer = (average / counter) * turn / 10;
+            offer = (average / counter) / 10;
 
             Console.WriteLine("Banker offers: {0:c}", offer);
             Console.Write("\n\nDeal or No Deal: ");
@@ -461,7 +517,7 @@ namespace DealOrNoDeal
             if (choice == "n")
             {
                 end = end - 1;
-                turn = turn + 1;
+                counter = 0;
                 Console.WriteLine("No Deal!");
                 Console.Clear();
                 Hide(ref money, ref check, ref randomC, ref caseHold);
