@@ -657,7 +657,7 @@ namespace DealOrNoDeal
                 }
 
 
-                offer = (average / counter) * choicePick / 10;
+                offer = ((average / counter) * choicePick) / 10;
 
                 Console.WriteLine("Banker offers: {0:c}", offer);
                 Console.Write("\n\nDeal or No Deal: ");
@@ -687,6 +687,7 @@ namespace DealOrNoDeal
             else
             {
                 LastTwoCasePick(ref money, ref randomC, ref check, ref playC, ref caseHold);
+                choicePick = choicePick + 1;
             }
 
             Console.ReadLine();
@@ -698,7 +699,7 @@ namespace DealOrNoDeal
             GameDisplay(ref money, ref check, ref randomC, ref caseHold);
 
             Console.Write("\n\nWould you like to keep your original case OR Take the case that is left\n");
-            Console.Write("\n\nYour case: {0}".PadLeft(30) + "| Value: ???????".PadLeft(15) + "\n", caseHold);
+            Console.Write("\n\nYour case: {0}".PadLeft(30) + " | Value: ???????".PadLeft(15) + "\n", caseHold);
             Console.Write("\nEnter here: ");
             lastPick = Convert.ToInt32(Console.ReadLine());
 
@@ -706,13 +707,15 @@ namespace DealOrNoDeal
             {
                 if ((lastPick - 1) == money[i].caseNumber && money[i].off == false)
                 {
-                    Console.Write("\nYou have picked case {0} you have WON {1:c}", (money[i].caseNumber + 1), money[randomC[i - 1]].caseMoney);
-                    Console.Write("\n\n\nYour original case: {0}".PadLeft(30) + " Contained: {1:c}".PadLeft(15) + "\n", caseHold, money[randomC[caseHold - 1]].caseMoney);
+                    Console.Clear();
+                    Console.Write("\n| You have picked case {0} you have WON {1:c} |", (money[i].caseNumber + 1), money[randomC[i - 1]].caseMoney);
+                    Console.Write("\n\n\nYour original case: {0} Contained: {1:c}".PadLeft(15) + "\n", caseHold, money[randomC[caseHold - 1]].caseMoney);
                 }
 
                 if ((lastPick - 1) == (caseHold - 1) && money[i].off == false)
                 {
-                    Console.Write("\n\n\nYou decided to keep the original case: {0}".PadLeft(30) + " You have WON: {1:c}".PadLeft(15) + "\n", caseHold, money[randomC[caseHold - 1]].caseMoney);
+                    Console.Clear();
+                    Console.Write("\n\n\n| You decided to keep the original case: {0}".PadLeft(30) + " You have WON: {1:c} |".PadLeft(15) + "\n", caseHold, money[randomC[caseHold - 1]].caseMoney);
                     Console.Write("\nThe other case {0} Contained {1:c}", (money[i].caseNumber + 1), money[randomC[i]].caseMoney);
                 }
             }
