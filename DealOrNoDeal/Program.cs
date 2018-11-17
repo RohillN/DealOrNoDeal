@@ -24,46 +24,70 @@ namespace DealOrNoDeal
 
     class Program
     {
-        static void Main()
+        public static void Main()
         {
             Menu();
         }
-        private static int end = 6;
+        private static int end = 6, choicePick = 1;
+        private static int[] select;
         public static Random rand = new Random();
 
         public static void Menu()
         {
+            bool invalidSectionPick = false;
             IntroText();
             Players[] student = new Players[21];
             Case[] money = new Case[26];
             StudentReadList(ref student);
             SuitCaseReadList(ref money);
-            Console.WriteLine("Select 1/2/3/4\n1 = Top 10 people\n2 = Full List\n3 = Edit Play Information\n4 = Game");
-            int temp = Convert.ToInt32(Console.ReadLine());
-
-            switch (temp)
+            do
             {
-                case 1:
-                    Console.WriteLine("Top 10 People");
-                    ClassSort(ref student);
-                    CheckDuplicatePlayers(ref student);
-                    break;
-                case 2:
-                    Console.WriteLine("Full List");
-                    ClassSort(ref student);
-                    Display(ref student);
-                    break;
-                case 3:
-                    Console.WriteLine("Edit a players infromation");
-                    EditStudents(ref student);
-                    break;
-                case 4:
-                    Console.WriteLine("Switch Case 4");
+                Console.Write("Select 1/2/3/4\n1 = Read Full List\n2 = Edit Players Information\n3 = Top 10 Players / Finalist / Game\n4 = Finalist / Game\n\nEnter Here: ");
+                int temp = Convert.ToInt32(Console.ReadLine());
+
+                switch (temp)
+                {
+                    case 1:
+                        Console.WriteLine("Full List");
+                        ClassSort(ref student);
+                        Display(ref student);
+                        ToMenu();
+                        invalidSectionPick = false;
+                        break;
+                    case 2:
+                        Console.WriteLine("Edit a players infromation");
+                        EditStudents(ref student);
+                        invalidSectionPick = false;
+                        break;
+                    case 3:
+                        Console.WriteLine("Top 10 People and Finalist");
+                        ClassSort(ref student);
+                        CheckDuplicatePlayers(ref student, ref money);
+                        invalidSectionPick = false;
+                        break;
+                    case 4:
+                        Checker(ref student, ref money);
+                        break;
+                    case 5:
+                        Console.WriteLine("Deal or No Deal");
+                        CheckDuplicateCaseMoney(ref money);
+                        invalidSectionPick = false;
+                        break;
+                    default:
+                        invalidSectionPick = true;
+                        break;
+                }
+                if (invalidSectionPick == true)
+                {
                     Console.Clear();
-                    CheckDuplicateCaseMoney(ref money);
-                    break;
-            }
-            Console.ReadLine();
+                    IntroText();
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write("*** Invalid input try again ***\n\n");
+                    Console.ResetColor();
+                }
+
+            } while (invalidSectionPick == true);
+
         }
         public static void IntroText()
         {
@@ -78,7 +102,7 @@ namespace DealOrNoDeal
 
         }
 
-        public static void CheckDuplicatePlayers(ref Players[] student)
+        public static void CheckDuplicatePlayers(ref Players[] student, ref Case[] money)
         {
             //Checking for repeating numbers up to 10
             int[] select = new int[10];
@@ -105,48 +129,152 @@ namespace DealOrNoDeal
                 select[i] = temp;
             }
 
-            PickTen(ref student, ref select);
+            PickTen(ref student, ref money, ref select);
 
         }
 
-        public static void PickTen(ref Players[] student, ref int[] select)
+        public static void Checker(ref Players[] student, ref Case[] money)
         {
-            //Displaying top 10 and putting in a topTenList array
-            string[] topTenList = new string[10];
+            //Checking for repeating numbers up to 10
+            Console.Clear();
+            int[] select = new int[10];
+
             for (int i = 0; i < select.Length; i++)
             {
-                string temp2 = student[(select[i] - 1)].firstName + " " + student[(select[i] - 1)].lastName;
-                topTenList[i] = temp2;
-            }
-            Console.WriteLine("Top ten finalist\n");
-            for (int i = 0; i < topTenList.Length; i++)
-            {
-                Console.Write(select[i] + " ");
-                Console.WriteLine(topTenList[i]);
-            }
-            //Checking if users wants to draw a winner from the topTenList
-            Console.WriteLine("\nPick one random winning player? Y/N");
-            string temp3 = Console.ReadLine().ToLower();
+                int temp = rand.Next(1, 22);
+                int count = 0;
 
-            if (temp3 == "y")
+                while (count <= i)
+                {
+                    if (temp == select[count])
+                    {
+                        count = 0;
+                        temp = rand.Next(1, 22);
+
+                    }
+                    else
+                    {
+                        count = count + 1;
+                    }
+
+                }
+                select[i] = temp;
+            }
+
+            PickPlay(ref student, ref money, ref select);
+
+        }
+
+        public static void PickPlay(ref Players[] student, ref Case[] money, ref int[] select)
+        {
+            int i = rand.Next(0, 10);
+            int menuFourPlayer = 0;
+            int winner = select[i];
+            Console.WriteLine("Winning player is... " + student[winner].firstName + " " + student[winner].lastName);
+
+            Console.Write("\nWould you like to play the game? Y/N: ");
+            string temp = Console.ReadLine().ToLower();
+
+            if (temp == "y")
             {
-                PickOne(ref topTenList);
+                menuFourPlayer = menuFourPlayer + 1;
+                Console.Clear();
+                GameFlash();
+                CheckDuplicateCaseMoney(ref money);
             }
             else
             {
+                Console.Clear();
                 Menu();
             }
-            Console.ReadLine();
+        }
+
+        public static void PickTen(ref Players[] student, ref Case[] money, ref int[] select)
+        {
+            //Displaying top 10 and putting in a topTenList array
+            Console.Clear();
+
+            Console.WriteLine("Top ten finalist\n");
+            for (int i = 0; i < select.Length; i++)
+            {
+                Console.Write(select[i] + " ");
+                Console.WriteLine(student[(select[i] - 1)].firstName + " " + student[(select[i] - 1)].lastName);
+            }
+            //Checking if users wants to draw a winner from the topTenList
+            Console.Write("\nPick one random winning player? Y/N: ");
+            string temp = Console.ReadLine().ToLower();
+
+            if (temp == "y")
+            {
+                PickOne(ref student, ref money, ref select);
+            }
+            else
+            {
+                Console.Clear();
+                Menu();
+            }
 
         }
 
-        public static void PickOne(ref string[] topTenList)
+        public static void PickOne(ref Players[] student, ref Case[] money, ref int[] select)
         {
             int i = rand.Next(0, 10);
+            int menuThreePlayer = 0;
+            Console.Clear();
+            int WinningPlayer = select[i];
+            Console.WriteLine("Winning player is... " + student[WinningPlayer].firstName + " " + student[WinningPlayer].lastName);
 
-            string WinningPlayer = topTenList[i];
-            Console.WriteLine("\n" + i + " " + WinningPlayer);
+            Console.Write("\nWould you like to play the game? Y/N: ");
+            string temp = Console.ReadLine().ToLower();
+
+            if (temp == "y")
+            {
+                menuThreePlayer = menuThreePlayer + 1;
+                Console.Clear();
+                GameFlash();
+                CheckDuplicateCaseMoney(ref money);
+            }
+            else
+            {
+                Console.Clear();
+                Menu();
+            }
+        }
+
+        public static void GameFlash()
+        {
+            for (int i = 0; i <= 1; i++)
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("DEAL OR NO DEAL");
+                Thread.Sleep(200);
+                Console.Clear();
+                Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("DEAL OR NO DEAL");
+                Thread.Sleep(200);
+                Console.Clear();
+                Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.WriteLine("DEAL OR NO DEAL");
+                Thread.Sleep(200);
+                Console.Clear();
+                Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("DEAL OR NO DEAL");
+                Thread.Sleep(200);
+                Console.Clear();
+                Console.ResetColor();
+            }
+
+        }
+
+        public static void ToMenu()
+        {
+            Console.Write("\nPress ENTER to retrun to menu");
             Console.ReadLine();
+            Console.Clear();
+            Menu();
         }
 
         public static void StudentReadList(ref Players[] student)
@@ -190,6 +318,7 @@ namespace DealOrNoDeal
 
         public static void Display(ref Players[] student)
         {
+            Console.Clear();
             int count = 0;
             Console.WriteLine("First Name".PadRight(15) + "Last Name".PadRight(15) + "Interest".PadRight(15) + "\n");
             do
@@ -198,7 +327,6 @@ namespace DealOrNoDeal
                 count = count + 1;
 
             } while (count < student.Length);
-
         }
 
         public static void EditStudents(ref Players[] student)
@@ -215,10 +343,13 @@ namespace DealOrNoDeal
 
                 if (attempt >= 1)
                 {
-                    Console.WriteLine("Sorry try again");
+                    Console.WriteLine("\nSorry try again");
                     Console.Write("\nWho do you want to edit: ");
                     string newWanted = Console.ReadLine();
                     wanted = newWanted;
+                    Console.Clear();
+                    Display(ref student);
+
                 }
                 attempt = attempt + 1;
 
@@ -230,7 +361,7 @@ namespace DealOrNoDeal
                         do
                         {
                             Console.Write("\nYou have picked: " + student[i].firstName + " " + student[i].lastName + "\n");
-                            Console.Write("\n\nPick a NUMBER equivalent\nWhat would you like to edit? \n1. First Name\n2. Last Name\n3. Interest\n4. All of the above\n5. Exit\n\nEnter Here:");
+                            Console.Write("\n\nPick a NUMBER equivalent\nWhat would you like to edit? \n1. First Name\n2. Last Name\n3. Interest\n4. All of the above\n5. Exit\n\nEnter Here: ");
                             int sectionPick = Convert.ToInt32(Console.ReadLine());
 
                             switch (sectionPick)
@@ -293,7 +424,8 @@ namespace DealOrNoDeal
                                     Menu();
                                 }
                             }
-
+                            Console.Clear();
+                            Display(ref student);
                         } while (invalidSectionPick == true);
                     }
 
@@ -335,6 +467,8 @@ namespace DealOrNoDeal
         public static void CheckDuplicateCaseMoney(ref Case[] money)
         {
             //Checking for repeating numbers up to 26
+            Console.Clear();
+
             int[] check = new int[26];
             int[] randomC = new int[26];
 
@@ -396,7 +530,10 @@ namespace DealOrNoDeal
             {
                 do
                 {
-                    Console.Write("\n\n*** Invalid input! ***\nEnter a case number from 1 - 26: ");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write("\n\n*** Invalid! Input is out of range! ***");
+                    Console.ResetColor();
+                    Console.Write("\nEnter a case number from 1 - 26: ");
                     caseHold = Convert.ToInt32(Console.ReadLine());
 
                 } while (caseHold <= 0 || caseHold > 26);
@@ -413,44 +550,51 @@ namespace DealOrNoDeal
             int round = 1;
             do
             {
+
                 GameDisplay(ref money, ref check, ref randomC, ref caseHold);
                 Console.Write("\n\n\nYour case: {0}".PadLeft(30) + "| Value: {1:c}".PadLeft(15) + "\n", caseHold, money[randomC[caseHold - 1]].caseMoney); //Change padding distance // also the value will be blanked out
 
                 Console.Write("\n{0} / {1} Pick Case: ", round, end);       //Asking for players input 
                 playC = Convert.ToInt32(Console.ReadLine());               //Storing the players input and converting to int data type
-
-                for (int i = 0; i < money.Length; i++)
-                {
-                    do
-                    {
-                        if (money[playC - 1].off == true)
-                        {
-                            Console.Write("\n\n*** Case has already been picked ***\nEnter a case number from 1 - 26: ");
-                            playC = Convert.ToInt32(Console.ReadLine());
-                            Console.Clear();
-                            GameDisplay(ref money, ref check, ref randomC, ref caseHold);
-                        }
-                    } while (money[i].off == true);
-                } 
-
                 do
                 {
                     if (playC <= 0 || playC > 26)
                     {
-                        Console.Write("\n\n*** Invalid! Case is out of range ***\nEnter a case number from 1 - 26: ");
+
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.Write("\n\n*** Invalid! Input is out of range! ***");
+                        Console.ResetColor();
+                        Console.Write("\nEnter a case number from 1 - 26: ");
                         playC = Convert.ToInt32(Console.ReadLine());
                         Console.Clear();
                         GameDisplay(ref money, ref check, ref randomC, ref caseHold);
                     }
 
-                    if (playC == caseHold)
+                    if ((playC - 1) == (caseHold - 1))
                     {
-                        Console.Write("\n\n*** Case has already been picked ***\nEnter a case number from 1 - 26: ");
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.Write("\n\n*** Case has already been picked! ***");
+                        Console.ResetColor();
+                        Console.Write("\nEnter a case number from 1 - 26: ");
                         playC = Convert.ToInt32(Console.ReadLine());
                         Console.Clear();
                         GameDisplay(ref money, ref check, ref randomC, ref caseHold);
                     }
-                } while (playC <= 0 || playC > 26 || playC == caseHold);
+                } while (playC <= 0 || playC > 26 || (playC - 1) == (caseHold - 1));
+
+                for (int i = 0; i < money.Length; i++)
+                {
+                    if ((playC - 1) == money[playC - 1].caseNumber && money[playC - 1].off == true)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.Write("\n\n*** Case has already been picked! ***");
+                        Console.ResetColor();
+                        Console.Write("\nEnter another case: ");
+                        playC = Convert.ToInt32(Console.ReadLine());
+                        Console.Clear();
+                        GameDisplay(ref money, ref check, ref randomC, ref caseHold);
+                    }
+                }
 
                 Console.Write("\n\nCase Number: {0}", playC);                                       //Display the case number and value of the case amount
                 Console.Write("\n\nCase contains: {0:c}", money[randomC[playC - 1]].caseMoney);     //users input - 1 == index in array slot
@@ -466,7 +610,7 @@ namespace DealOrNoDeal
                         }
                         else
                         {
-                            Console.Write(" ");
+                            Console.Write("");
                         }
                     }
 
@@ -483,13 +627,15 @@ namespace DealOrNoDeal
             {
                 if (money[i].off == false)
                 {
-                    Console.Write("{0}".PadRight(5), (money[i].caseNumber + 1)); //Change padding distance
+                    Console.Write("| {0} ", (money[i].caseNumber + 1)); //Change padding distance
                 }
                 else
                 {
-                    Console.Write(" ");
+                    Console.Write("|   ");
                 }
+
             }
+            //Console.Write("|");
         }
         public static void Banker(ref Case[] money, ref int[] check, ref int[] randomC, ref int caseHold, ref int playC)
         {
@@ -498,36 +644,81 @@ namespace DealOrNoDeal
             int counter = 0;
             string choice;
 
-
-            for (int i = 0; i < money.Length; i++)
+            if (choicePick < 9)
             {
-                if (money[i].off == false)
+
+                for (int i = 0; i < money.Length; i++)
                 {
-                    counter = counter + 1;
-                    average = (average + money[i].caseMoney + money[caseHold - 1].caseMoney);
+                    if (money[i].off == false)
+                    {
+                        counter = counter + 1;
+                        average = (average + money[i].caseMoney + money[caseHold - 1].caseMoney);
+                    }
+                }
+
+
+                offer = (average / counter) * choicePick / 10;
+
+                Console.WriteLine("Banker offers: {0:c}", offer);
+                Console.Write("\n\nDeal or No Deal: ");
+                choice = Console.ReadLine().ToLower().Substring(0, 1);
+
+                if (choice == "n")
+                {
+                    if (end == 1)
+                    {
+                        end = end + 1;
+                    }
+                    end = end - 1;
+                    counter = 0;
+                    average = 0;
+                    choicePick = choicePick + 1;
+                    Console.WriteLine("No Deal!");
+                    Console.Clear();
+                    Hide(ref money, ref check, ref randomC, ref caseHold);
+                }
+                if (choice == "d")
+                {
+                    Console.Clear();
+                    Console.WriteLine("DEAL!!\nYou have won {0:c}", offer);
+                    ToMenu();
                 }
             }
-
-            offer = (average / counter) / 10;
-
-            Console.WriteLine("Banker offers: {0:c}", offer);
-            Console.Write("\n\nDeal or No Deal: ");
-            choice = Console.ReadLine().ToLower().Substring(0, 1);
-
-            if (choice == "n")
+            else
             {
-                end = end - 1;
-                counter = 0;
-                Console.WriteLine("No Deal!");
-                Console.Clear();
-                Hide(ref money, ref check, ref randomC, ref caseHold);
-            }
-            if (choice == "d")
-            {
-                Console.WriteLine("DEAL!!\nYou have won {0:c}", offer);
+                LastTwoCasePick(ref money, ref randomC, ref check, ref playC, ref caseHold);
             }
 
             Console.ReadLine();
+        }
+
+        public static void LastTwoCasePick(ref Case[] money, ref int[] randomC, ref int[] check, ref int playC, ref int caseHold)
+        {
+            int lastPick = 0;
+            GameDisplay(ref money, ref check, ref randomC, ref caseHold);
+
+            Console.Write("\n\nWould you like to keep your original case OR Take the case that is left\n");
+            Console.Write("\n\nYour case: {0}".PadLeft(30) + "| Value: ???????".PadLeft(15) + "\n", caseHold);
+            Console.Write("\nEnter here: ");
+            lastPick = Convert.ToInt32(Console.ReadLine());
+
+            for (int i = 0; i < money.Length; i++)
+            {
+                if ((lastPick - 1) == money[i].caseNumber && money[i].off == false)
+                {
+                    Console.Write("\nYou have picked case {0} you have WON {1:c}", (money[i].caseNumber + 1), money[randomC[i - 1]].caseMoney);
+                    Console.Write("\n\n\nYour original case: {0}".PadLeft(30) + " Contained: {1:c}".PadLeft(15) + "\n", caseHold, money[randomC[caseHold - 1]].caseMoney);
+                }
+
+                if ((lastPick - 1) == (caseHold - 1) && money[i].off == false)
+                {
+                    Console.Write("\n\n\nYou decided to keep the original case: {0}".PadLeft(30) + " You have WON: {1:c}".PadLeft(15) + "\n", caseHold, money[randomC[caseHold - 1]].caseMoney);
+                    Console.Write("\nThe other case {0} Contained {1:c}", (money[i].caseNumber + 1), money[randomC[i]].caseMoney);
+                }
+            }
+
+            ToMenu();
+
         }
     }
 }
