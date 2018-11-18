@@ -704,7 +704,6 @@ namespace DealOrNoDeal
             else
             {
                 LastTwoCasePick(ref money, ref randomC, ref check, ref playC, ref caseHold);       //Calling or going to the last two cases method
-                //choicePick = choicePick + 1;                                                       //round checker will + 1
             }
 
             Console.ReadLine();
