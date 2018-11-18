@@ -171,7 +171,6 @@ namespace DealOrNoDeal
         public static void PickPlay(ref Players[] student, ref Case[] money, ref int[] select)
         {
             int i = rand.Next(0, 10);               //variable i will hold a random slot which will be used for an index
-            int menuFourPlayer = 0;
             Console.WriteLine("Winning player is... " + student[select[i]].firstName + " " + student[select[i]].lastName);        //Selecting a winner from the select array and using the rand i index slot 
 
             Console.Write("\nWould you like to play the game? Y/N: ");
@@ -179,7 +178,6 @@ namespace DealOrNoDeal
 
             if (temp == "y")                                                //if true
             {
-                menuFourPlayer = menuFourPlayer + 1;
                 Console.Clear();
                 GameFlash();                                                //Calling or going to the intro to the game method
                 CheckDuplicateCaseMoney(ref money);                        //Calling or going to game method
@@ -229,7 +227,6 @@ namespace DealOrNoDeal
         {
             //This method will select one player from the top 10  // Also asking user if they want to play the game
             int i = rand.Next(0, 10);                  //variable i will hold a random slot which will be used for an index
-            int menuThreePlayer = 0;
             //Console.Clear();                    //Comment this out if your wanting to see top 10 and finalist at the same time
             Console.WriteLine("\nWinning player is... " + TopTenList[i] + "\n");   //Selecting a winner from the top ten array and using the rand i index slot 
 
@@ -238,7 +235,6 @@ namespace DealOrNoDeal
 
             if (temp == "y")                                             //If true
             {
-                menuThreePlayer = menuThreePlayer + 1;
                 Console.Clear();
                 GameFlash();                                            //Calling or going to the intro to the game method
                 CheckDuplicateCaseMoney(ref money);                     //Calling or going to game method
@@ -544,7 +540,7 @@ namespace DealOrNoDeal
 
         public static void CasePick(ref Case[] money, ref int[] check, ref int[] randomC)
         {
-int caseHold;
+            int caseHold;
             Console.Write("Pick a case from 1 - 26: ");
             caseHold = Convert.ToInt32(Console.ReadLine());
             if (caseHold <= 0 || caseHold > 26)
@@ -573,7 +569,7 @@ int caseHold;
             {
 
                 GameDisplay(ref money, ref check, ref randomC, ref caseHold);       //Calling or going to the display method
-                Console.Write("\n\n\nYour case: {0}".PadLeft(30) + "| Value: {1:c}".PadLeft(15) + "\n", caseHold, money[randomC[caseHold - 1]].caseMoney); //Change padding distance // also the value will be blanked out
+                Console.Write("\n\n\nYour case: {0}".PadLeft(30) + "| Value: ????????" + "\n", caseHold); //Change padding distance // also the value will be blanked out
 
                 Console.Write("\n{0} / {1} Pick Case: ", round, end);       //Asking for players input 
                 playC = Convert.ToInt32(Console.ReadLine());               //Storing the players input and converting to int data type
