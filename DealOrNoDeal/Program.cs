@@ -29,7 +29,7 @@ namespace DealOrNoDeal
             Menu();
         }
         private static int end = 6, choicePick = 1;
-        private static int[] select;
+        //private static int[] select;
         public static Random rand = new Random();
 
         public static void Menu()
@@ -42,7 +42,7 @@ namespace DealOrNoDeal
             SuitCaseReadList(ref money);
             do
             {
-                Console.Write("Select 1/2/3/4\n1 = Read Full List\n2 = Edit Players Information\n3 = Top 10 Players / Finalist / Game\n4 = Finalist / Game\n\nEnter Here: ");
+                Console.Write("Select 1/2/3/4\n1 = Read Full List\n2 = Edit Players Information\n3 = Top 10 Players / Finalist / Game\n4 = Finalist / Game\n5 = Game\n\nEnter Here: ");
                 int temp = Convert.ToInt32(Console.ReadLine());
 
                 switch (temp)
@@ -111,7 +111,7 @@ namespace DealOrNoDeal
             int[] select = new int[10];
 
             for (int i = 0; i < select.Length; i++)         //Looping for the length of the array (10) or (0 to 9)
-            {   
+            {
                 int temp = rand.Next(1, 22);                //temp holding a random number
                 int count = 0;                              //count starting at 0
 
@@ -172,44 +172,50 @@ namespace DealOrNoDeal
         {
             int i = rand.Next(0, 10);               //variable i will hold a random slot which will be used for an index
             int menuFourPlayer = 0;
-            int winner = select[i];                 //Storing a random value into winner variable 
-            Console.WriteLine("Winning player is... " + student[select[winner]].firstName + " " + student[select[winner]].lastName);        //Selecting a winner from the select array and using the winner index slot 
+            Console.WriteLine("Winning player is... " + student[select[i]].firstName + " " + student[select[i]].lastName);        //Selecting a winner from the select array and using the rand i index slot 
 
-            Console.Write("\nWould you like to play the game? Y/N: ");  
-            string temp = Console.ReadLine().ToLower().Substring(0, 1);     //Asking user to play the game and storing input
+            Console.Write("\nWould you like to play the game? Y/N: ");
+            string temp = Console.ReadLine().ToLower();     //Asking user to play the game and storing input
 
             if (temp == "y")                                                //if true
             {
-                menuFourPlayer = menuFourPlayer + 1;                        
+                menuFourPlayer = menuFourPlayer + 1;
                 Console.Clear();
                 GameFlash();                                                //Calling or going to the intro to the game method
                 CheckDuplicateCaseMoney(ref money);                        //Calling or going to game method
             }
             else                                                           //if false 
             {
-                Console.Clear();                                        
+                Console.Clear();
                 Menu();                                                   //Calling or going to the menu method
-            } 
+            }
         }
 
         public static void PickTen(ref Players[] student, ref Case[] money, ref int[] select)
         {
             //Displaying top 10 and putting in a topTenList array
             Console.Clear();
+            string[] TopTenList = new string[10];
 
-            Console.WriteLine("Top ten finalist\n");
+            Console.WriteLine("Top ten finalist");
             for (int i = 0; i < select.Length; i++)             //For looping the length of select array (10 slots) or (0 to 9)
             {
-                //Console.Write(select[i] + " ");           //Commented out // Was used to test to see the index slot of the top ten students 
-                Console.WriteLine(student[(select[i] - 1)].firstName + " " + student[(select[i] - 1)].lastName);
+                string temp2 = student[(select[i] - 1)].firstName + " " + student[(select[i] - 1)].lastName;   //Players name will be transfered to a temp 
+                TopTenList[i] = temp2;       //top ten array will be filled with temp and transfered over to pick one
             }
-            
-            Console.Write("\nPick one random winning player? Y/N: ");       //Checking if users wants to pick a finalist from the 10
+
+            for(int i =0; i < TopTenList.Length; i++)
+            {
+                //Console.Write(select[i] + " ");       //Displays the index number of the players //Can be turned on to see the index numbers
+                Console.Write("\n" + TopTenList[i]);    //Displays the top ten players
+            }
+
+            Console.Write("\n\nPick one random winning player? Y/N: ");       //Checking if users wants to pick a finalist from the 10
             string temp = Console.ReadLine().ToLower().Substring(0, 1);     //Storing input
 
             if (temp == "y")                                                //If true
             {
-                PickOne(ref student, ref money, ref select);                //Calling or going to picking finalist method
+                PickOne(ref student, ref money, ref TopTenList);                //Calling or going to picking finalist method
             }
             else                                                            //If false
             {
@@ -219,18 +225,17 @@ namespace DealOrNoDeal
 
         }
 
-        public static void PickOne(ref Players[] student, ref Case[] money, ref int[] select)
+        public static void PickOne(ref Players[] student, ref Case[] money, ref string[] TopTenList)
         {
             //This method will select one player from the top 10  // Also asking user if they want to play the game
             int i = rand.Next(0, 10);                  //variable i will hold a random slot which will be used for an index
             int menuThreePlayer = 0;
-            Console.Clear();
-            int WinningPlayer = select[i];            //Storing a random value into winner variable
-            Console.WriteLine("Winning player is... " + student[WinningPlayer].firstName + " " + student[WinningPlayer].lastName);   //Selecting a winner from the select array and using the winner index slot 
+            //Console.Clear();                    //Comment this out if your wanting to see top 10 and finalist at the same time
+            Console.WriteLine("\nWinning player is... " + TopTenList[i] + "\n");   //Selecting a winner from the top ten array and using the rand i index slot 
 
-            Console.Write("\nWould you like to play the game? Y/N: "); 
+            Console.Write("\nWould you like to play the game? Y/N: ");
             string temp = Console.ReadLine().ToLower().Substring(0, 1);   //Asking user to play the game and storing input
-             
+
             if (temp == "y")                                             //If true
             {
                 menuThreePlayer = menuThreePlayer + 1;
@@ -278,7 +283,7 @@ namespace DealOrNoDeal
         public static void ToMenu()
         {
             //Simple return to menu method that doesnt require storing of text / number input
-            
+
             Console.Write("\nPress ENTER to retrun to menu");         //Tell the user to press ENTER
             Console.ReadLine();                                       //It will stay as a read line untill ENTER is pressed
             Console.Clear();                                          //Clear console
@@ -339,7 +344,7 @@ namespace DealOrNoDeal
             {
                 Console.WriteLine(student[count].firstName.PadRight(15) + student[count].lastName.PadRight(15) + student[count].interest.PadRight(15));    //Display first and last name and interest will padding
                 count = count + 1;      //count + 1, will move to the next index slot                                                                      //Using the struct array name "student" 
-                 
+
             } while (count < student.Length);  //while count is less than the student length (21)
         }
 
@@ -375,7 +380,7 @@ namespace DealOrNoDeal
                         do
                         {
                             Console.Write("\nYou have picked: " + student[i].firstName + " " + student[i].lastName + "\n");         //Display name hat the user has picked 
-                            Console.Write("\n\nPick a NUMBER equivalent\nWhat would you like to edit? \n1. First Name\n2. Last Name\n3. Interest\n4. All of the above\n5. Exit\n\nEnter Here: "); 
+                            Console.Write("\n\nPick a NUMBER equivalent\nWhat would you like to edit? \n1. First Name\n2. Last Name\n3. Interest\n4. All of the above\n5. Exit\n\nEnter Here: ");
                             int sectionPick = Convert.ToInt32(Console.ReadLine());                       //Give user selection pick and store the input
 
                             switch (sectionPick)
@@ -425,7 +430,7 @@ namespace DealOrNoDeal
                             }
                             else
                             {
-                                Console.Write("\nDo you want to see the updated list? Y/N: "); 
+                                Console.Write("\nDo you want to see the updated list? Y/N: ");
                                 string update = Console.ReadLine().ToLower();                   //Ask user for updated list and store input
 
                                 if (update == "y")                              //if true
@@ -489,15 +494,15 @@ namespace DealOrNoDeal
 
             for (int i = 0; i < check.Length; i++)           //Looping for the length of the array (10) or (0 to 9)
             {
-                int temp = rand.Next(1, 22);                //temp holding a random number
+                int temp = rand.Next(0, 26);                //temp holding a random number
                 int count = 0;                              //count starting at 0
 
-                while (count <= i)                          //While count is less than or equal to i
+                while (count < i)                          //While count is less than or equal to i
                 {
                     if (temp == check[count])              //checking if the temps random numbers equals array slot "count" value
                     {
                         count = 0;                          //if its true count will reset 
-                        temp = rand.Next(1, 22);            //if its true temp will get another rand number
+                        temp = rand.Next(0, 26);            //if its true temp will get another rand number
 
                     }
                     else                                    //Do this if temp is not equal to the array slot "count" value
@@ -539,24 +544,24 @@ namespace DealOrNoDeal
 
         public static void CasePick(ref Case[] money, ref int[] check, ref int[] randomC)
         {
-            int caseHold;
+int caseHold;
             Console.Write("Pick a case from 1 - 26: ");
-            caseHold = Convert.ToInt32(Console.ReadLine());     //Ask user for case number, store and convert
-            if (caseHold <= 0 || caseHold > 26)             //User error checking if the input is in range
+            caseHold = Convert.ToInt32(Console.ReadLine());
+            if (caseHold <= 0 || caseHold > 26)
             {
-                do                                              //do this
+                do
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.Write("\n\n*** Invalid! Input is out of range! ***");           //Telling the use their input is out of the range
-                    Console.ResetColor();       
-                    Console.Write("\nEnter a case number from 1 - 26: ");                  //Asking for another input and storing it 
+                    Console.Write("\n\n*** Invalid! Input is out of range! ***");
+                    Console.ResetColor();
+                    Console.Write("\nEnter a case number from 1 - 26: ");
                     caseHold = Convert.ToInt32(Console.ReadLine());
 
-                } while (caseHold <= 0 || caseHold > 26);                                    //Keep doing it while the input is out of range
+                } while (caseHold <= 0 || caseHold > 26);
             }
             Console.Clear();
-            money[caseHold - 1].off = true;                                                 //Turing the index slot of user input to true
-            Hide(ref money, ref check, ref randomC, ref caseHold);                          //Calling or going to the hide method
+            money[caseHold - 1].off = true;
+            Hide(ref money, ref check, ref randomC, ref caseHold);
         }
 
         public static void Hide(ref Case[] money, ref int[] check, ref int[] randomC, ref int caseHold)
