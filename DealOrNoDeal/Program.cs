@@ -42,7 +42,7 @@ namespace DealOrNoDeal
             SuitCaseReadList(ref money);
             do
             {
-                Console.Write("Select 1/2/3/4\n1 = Read Full List\n2 = Edit Players Information\n3 = Top 10 Players / Finalist / Game\n4 = Finalist / Game\n5 = Game\n\nEnter Here: ");
+                Console.Write("Select 1/2/3/4/5/6\n1 = Read Full List\n2 = Edit Players Information\n3 = Top 10 Players / Finalist / Game\n4 = Finalist / Game\n5 = Game\n6 = Quit\nEnter Here: ");
                 int temp = Convert.ToInt32(Console.ReadLine());
 
                 switch (temp)
@@ -73,6 +73,10 @@ namespace DealOrNoDeal
                         Console.WriteLine("Deal or No Deal");
                         CheckDuplicateCaseMoney(ref money);
                         invalidSectionPick = false;
+                        break;
+                    case 6:
+                        Console.WriteLine("Quitting...");
+                        Environment.Exit(0);
                         break;
                     default:
                         invalidSectionPick = true;
