@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using System.Threading;
 
@@ -24,13 +20,13 @@ namespace DealOrNoDeal
 
     class Program
     {
+        private static int end = 6, choicePick = 1;
+        public static Random rand = new Random();
+
         public static void Main()
         {
             Menu();
         }
-        private static int end = 6, choicePick = 1;
-        //private static int[] select;
-        public static Random rand = new Random();
 
         public static void Menu()
         {
@@ -90,14 +86,12 @@ namespace DealOrNoDeal
                     Console.Write("*** Invalid input try again ***\n\n");
                     Console.ResetColor();
                 }
-
             } while (invalidSectionPick == true);
-
         }
+
         public static void IntroText()
         {
-            //Ascii generated text found online 
-
+            //Ascii generated text found online
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine(@"'||''|.                   '||   ..|''||           '|.   '|'         '||''|.                   '||  ");
             Console.WriteLine(@" ||   ||    ....   ....    ||  .|'    ||  ... ..   |'|   |    ...    ||   ||    ....   ....    ||  ");
@@ -106,12 +100,15 @@ namespace DealOrNoDeal
             Console.WriteLine(@".||...|'   '|...' '|..'|' .||.  ''|...|'  .||.    .|.   '|   '|..|' .||...|'   '|...' '|..'|' .||. ");
             Console.WriteLine(@"");
             Console.ResetColor();
-
         }
 
+        /// <summary>
+        /// Checking for repeating numbers up to 10. This method is for the top ten (FOR MENU 3)
+        /// </summary>
+        /// <param name="student"></param>
+        /// <param name="money"></param>
         public static void CheckDuplicatePlayers(ref Players[] student, ref Case[] money)
         {
-            //Checking for repeating numbers up to 10 // This method is for the top ten // FOR MENU 3
             int[] select = new int[10];
 
             for (int i = 0; i < select.Length; i++)         //Looping for the length of the array (10) or (0 to 9)
@@ -125,24 +122,25 @@ namespace DealOrNoDeal
                     {
                         count = 0;                          //if its true count will reset 
                         temp = rand.Next(1, 22);            //if its true temp will get another rand number
-
                     }
                     else                                    //Do this if temp is not equal to the array slot "count" value
                     {
                         count = count + 1;                  //Count + 1, moving to the next index of the select index
                     }
-
                 }
                 select[i] = temp;                           //select and the index of i will equal the temp value
             }
 
             PickTen(ref student, ref money, ref select);    //Calling or going to a method
-
         }
 
+        /// <summary>
+        /// Checking for repeating numbers up to 10. This method is filling in 10 slots from the one pick (FOR MENU 4)
+        /// </summary>
+        /// <param name="student"></param>
+        /// <param name="money"></param>
         public static void Checker(ref Players[] student, ref Case[] money)
         {
-            //Checking for repeating numbers up to 10 // This method is filling in 10 slots from the one pick // FOR MENU 4
             Console.Clear();
             int[] select = new int[10];
 
@@ -157,19 +155,16 @@ namespace DealOrNoDeal
                     {
                         count = 0;                          //if its true count will reset 
                         temp = rand.Next(1, 22);            //if its true temp will get another rand number
-
                     }
                     else                                    //Do this if temp is not equal to the array slot "count" value
                     {
                         count = count + 1;                  //Count + 1, moving to the next index of the select index
                     }
-
                 }
                 select[i] = temp;                           //select and the index of i will equal the temp value
             }
 
             PickPlay(ref student, ref money, ref select);   //Calling or going to a method
-
         }
 
         public static void PickPlay(ref Players[] student, ref Case[] money, ref int[] select)
@@ -193,9 +188,14 @@ namespace DealOrNoDeal
             }
         }
 
+        /// <summary>
+        /// Displaying top 10 and putting in a topTenList array
+        /// </summary>
+        /// <param name="student"></param>
+        /// <param name="money"></param>
+        /// <param name="select"></param>
         public static void PickTen(ref Players[] student, ref Case[] money, ref int[] select)
         {
-            //Displaying top 10 and putting in a topTenList array
             Console.Clear();
             string[] TopTenList = new string[10];
 
@@ -224,7 +224,6 @@ namespace DealOrNoDeal
                 Console.Clear();
                 Menu();                                                     //Calling or going to menu method
             }
-
         }
 
         public static void PickOne(ref Players[] student, ref Case[] money, ref string[] TopTenList)
@@ -250,10 +249,11 @@ namespace DealOrNoDeal
             }
         }
 
+        /// <summary>
+        /// This method is the intro to the game. It will false the text and change colors
+        /// </summary>
         public static void GameFlash()
         {
-            //This method is the intro to the game // It will false the text and change colors 
-
             for (int i = 0; i <= 1; i++)            //For looping once
             {
                 Console.ForegroundColor = ConsoleColor.Yellow;    //Foreground color will change 
@@ -277,23 +277,25 @@ namespace DealOrNoDeal
                 Console.Clear();
                 Console.ResetColor();
             }
-
         }
 
+        /// <summary>
+        /// Simple return to menu method that doesnt require storing of text / number input
+        /// </summary>
         public static void ToMenu()
         {
-            //Simple return to menu method that doesnt require storing of text / number input
-
             Console.Write("\nPress ENTER to retrun to menu");         //Tell the user to press ENTER
             Console.ReadLine();                                       //It will stay as a read line untill ENTER is pressed
             Console.Clear();                                          //Clear console
             Menu();                                                   //Calling or going to the menu method
         }
 
+        /// <summary>
+        /// This method will be reading in the deal or no deal text 
+        /// </summary>
+        /// <param name="student"></param>
         public static void StudentReadList(ref Players[] student)
         {
-            //This method will be reading in the deal or no deal text 
-
             StreamReader sr = new StreamReader("DealOrNoDeal.txt");      //Declare stream reader and the text file // Text file located in bin > Debug 
             int count = 0;                                               //count starting from 0 // This will act as the index slot
             do                                                           //do this
@@ -302,15 +304,17 @@ namespace DealOrNoDeal
                 student[count].lastName = sr.ReadLine();                 //using the struct array name "student" and using the index "count" and selecting the struct name "lastName" // Then stream reading it in that slot
                 student[count].interest = sr.ReadLine();                 //using the struct array name "student" and using the index "count" and selecting the struct name "interest"// Then stream reading it in that slot
                 count = count + 1;                                       //count will + 1 // moving the the next index slot
-
             } while (!sr.EndOfStream);                                  //While stream reader is not at the end or the stream or file
 
             sr.Close();                                                 //Making sure to close the stream reader
         }
+
+        /// <summary>
+        /// This method will be sorting the last name from a - z
+        /// </summary>
+        /// <param name="student"></param>
         public static void ClassSort(ref Players[] student)
         {
-            //This method will be sorting the last name from a - z
-
             for (int i = 0; i < student.Length - 1; i++)                //For the length of student array (21) - 1 // so it doesnt fall off the array
             {
                 for (int pos = 0; pos < student.Length - 1; pos++)      //For the length of student array (21)  - 1 and using pos // so it doesnt fall off the array
@@ -323,9 +327,13 @@ namespace DealOrNoDeal
             }
         }
 
+        /// <summary>
+        /// Swaping method 
+        /// </summary>
+        /// <param name="pos1"></param>
+        /// <param name="pos2"></param>
         public static void ClassSwap(ref Players pos1, ref Players pos2)
         {
-            //Swaping method 
             Players temp;       //Temp will hold the players struct data type
 
             temp = pos1;        //General idea: pos1 = pos2 && pos2 = pos1
@@ -333,10 +341,12 @@ namespace DealOrNoDeal
             pos2 = temp;
         }
 
+        /// <summary>
+        /// This method will display the list of player or students 
+        /// </summary>
+        /// <param name="student"></param>
         public static void Display(ref Players[] student)
         {
-            //This method will display the list of player or students 
-
             Console.Clear();
             int count = 0;              //count will act as the index counter
             Console.WriteLine("First Name".PadRight(15) + "Last Name".PadRight(15) + "Interest".PadRight(15) + "\n");   //Title of each column
@@ -359,7 +369,6 @@ namespace DealOrNoDeal
             string wanted = Console.ReadLine().ToLower();                   //Asking user who that want to end and storing           
             do
             {
-
                 if (attempt >= 1)           //if user got input incorrect this will run 
                 {
                     Console.WriteLine("\nSorry try again");
@@ -368,7 +377,6 @@ namespace DealOrNoDeal
                     wanted = newWanted;                                                 //old input will equal the new input
                     Console.Clear();
                     Display(ref student);                                               //Calling or going to the display method
-
                 }
                 attempt = attempt + 1;                  //Attempt will + 1 if input was wrong
 
@@ -376,7 +384,7 @@ namespace DealOrNoDeal
                 {
                     if (student[i].lastName.ToLower() == wanted)        //checking if input is in the array and looking through last name
                     {
-                        found = true;                           //found will eqaul true
+                        found = true;                           //found will equal true
                         do
                         {
                             Console.Write("\nYou have picked: " + student[i].firstName + " " + student[i].lastName + "\n");         //Display name hat the user has picked 
@@ -450,10 +458,12 @@ namespace DealOrNoDeal
 
         }
 
+        /// <summary>
+        /// This method will write back to the main text file
+        /// </summary>
+        /// <param name="student"></param>
         public static void WriteNewList(ref Players[] student)
         {
-            //This method will write back to the main text file
-
             StreamWriter sw = new StreamWriter("DealOrNoDeal.txt"); //Deaclare the stream writer and the text file name located in bin > Debug
             int count = 0;                                          //count acting as index
             do
@@ -465,13 +475,14 @@ namespace DealOrNoDeal
             } while (count < student.Length);                      //while count is less than the student length (21)
 
             sw.Close();                                 //Making sure to close stream writer
-
         }
 
+        /// <summary>
+        /// Method will read a file holding the case numbers and values
+        /// </summary>
+        /// <param name="money"></param>
         public static void SuitCaseReadList(ref Case[] money)
         {
-            //Method will read a file holding the case numbers and values
-
             StreamReader sr = new StreamReader("TestCase.txt");     //Declare stream reader and the text file name located bin > Debug
             int count = 0;                                      //count will act as index
             do
@@ -484,9 +495,13 @@ namespace DealOrNoDeal
 
             sr.Close();
         }
+
+        /// <summary>
+        /// Checking for repeating numbers up to 26
+        /// </summary>
+        /// <param name="money"></param>
         public static void CheckDuplicateCaseMoney(ref Case[] money)
         {
-            //Checking for repeating numbers up to 26
             Console.Clear();
 
             int[] check = new int[26];
@@ -503,13 +518,11 @@ namespace DealOrNoDeal
                     {
                         count = 0;                          //if its true count will reset 
                         temp = rand.Next(0, 26);            //if its true temp will get another rand number
-
                     }
                     else                                    //Do this if temp is not equal to the array slot "count" value
                     {
                         count = count + 1;                  //Count + 1, moving to the next index of the select index
                     }
-
                 }
                 check[i] = temp;
                 randomC[i] = temp;
@@ -532,9 +545,13 @@ namespace DealOrNoDeal
             CasePick(ref money, ref check, ref randomC);        //Calling or going to case pick method
         }
 
+        /// <summary>
+        /// Swaping method of numbers
+        /// </summary>
+        /// <param name="pos1"></param>
+        /// <param name="pos2"></param>
         public static void CaseSwap(ref int pos1, ref int pos2)
         {
-            //Swaping method of numbers
             int temp;
 
             temp = pos1;            //General idea: pos1 = pos2  && pos2 = pos1
@@ -556,7 +573,6 @@ namespace DealOrNoDeal
                     Console.ResetColor();
                     Console.Write("\nEnter a case number from 1 - 26: ");
                     caseHold = Convert.ToInt32(Console.ReadLine());
-
                 } while (caseHold <= 0 || caseHold > 26);
             }
             Console.Clear();
@@ -571,17 +587,14 @@ namespace DealOrNoDeal
             int round = 1;
             do
             {
-
                 GameDisplay(ref money, ref check, ref randomC, ref caseHold);       //Calling or going to the display method
                 Console.Write("\n\n\nYour case: {0}".PadLeft(30) + "| Value: ????????" + "\n", caseHold); //Change padding distance // also the value will be blanked out
-
                 Console.Write("\n{0} / {1} Pick Case: ", round, end);       //Asking for players input 
                 playC = Convert.ToInt32(Console.ReadLine());               //Storing the players input and converting to int data type
                 do
                 {
                     if (playC <= 0 || playC > 26)                               //User error checking
                     {
-
                         Console.ForegroundColor = ConsoleColor.Red;
                         Console.Write("\n\n*** Invalid! Input is out of range! ***");   //Telling user input is out of range
                         Console.ResetColor();
@@ -634,7 +647,6 @@ namespace DealOrNoDeal
                             Console.Write("");                      //Display as blank
                         }
                     }
-
                 } while (found != true);                        //Keep checking thought if users input is in the array // until found is not true
                 Console.Clear();
                 round = round + 1;
@@ -654,9 +666,7 @@ namespace DealOrNoDeal
                 {
                     Console.Write("|   ");              //Decoration
                 }
-
             }
-            //Console.Write("|");
         }
         public static void Banker(ref Case[] money, ref int[] check, ref int[] randomC, ref int caseHold, ref int playC)
         {
@@ -667,7 +677,6 @@ namespace DealOrNoDeal
 
             if (choicePick < 9)                                 //round checker
             {
-
                 for (int i = 0; i < money.Length; i++)      //for the length of money (26)
                 {
                     if (money[i].off == false)             //checking all the slots that equal false
@@ -677,9 +686,7 @@ namespace DealOrNoDeal
                     }
                 }
 
-
                 offer = ((average / counter) * choicePick) / 10;        //bankers offer 
-
                 Console.WriteLine("Banker offers: {0:c}", offer);   //Display off
                 Console.Write("\n\nDeal or No Deal: ");             //Ask user for deal or no deal // store input
                 choice = Console.ReadLine().ToLower().Substring(0, 1);
@@ -741,8 +748,6 @@ namespace DealOrNoDeal
             }
 
             ToMenu();           //Calling or going to the menu method
-
         }
     }
 }
-
