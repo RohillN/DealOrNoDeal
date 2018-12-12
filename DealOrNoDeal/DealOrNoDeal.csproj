@@ -57,6 +57,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\BriefcaseHelper.cs" />
+    <Compile Include="Helpers\PlayerHelper.cs" />
     <Compile Include="MenuOperations.cs" />
     <Compile Include="Models\Case.cs" />
     <Compile Include="Models\Players.cs" />

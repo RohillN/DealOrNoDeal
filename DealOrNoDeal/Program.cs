@@ -34,20 +34,20 @@ namespace DealOrNoDeal
             MenuOperations.ShowIntroText();
             int menuChoice = 0;
 
-            List<Models.Players> playersList = ReadPlayerList();
-            List<Models.Case> briefcaseList = ReadBriefcaseList();
+            List<Models.Players> playersList = Helpers.PlayerHelper.ReadPlayerList();
+            List<Models.Case> briefcaseList = Helpers.BriefcaseHelper.ReadBriefcaseList();
 
             while (menuChoice != 6)
             {
-                Console.Write("Select 1/2/3/4/5/6\n1 = Read Full List\n2 = Edit Players Information\n3 = Top 10 Players / Finalist / Game\n4 = Finalist / Game\n5 = Game\n6 = Quit\nEnter Here: ");
+                Console.Write("Select 1/2/3/4/5/6\n1 = Read Full Player List\n2 = Edit Players Information\n3 = Top 10 Players / Finalist / Game\n4 = Finalist / Game\n5 = Game\n6 = Quit\nEnter Here: ");
                 menuChoice = Convert.ToInt32(Console.ReadLine());
 
                 switch (menuChoice)
                 {
                     case 1:
-                        Console.WriteLine("Full List");
+                        Console.WriteLine("Full Player List");
                         //ClassSort(ref student);
-                        PrintPlayerInfo(playersList);
+                        Helpers.PlayerHelper.PrintPlayerInfo(playersList);
                         ReturnToMenu();
                         break;
                     case 2:
@@ -270,39 +270,6 @@ namespace DealOrNoDeal
         }
 
         /// <summary>
-        /// This method will be reading in the deal or no deal text
-        /// </summary>
-        /// <returns>List of students</returns>
-        public static List<Models.Players> ReadPlayerList()
-        {
-            List<Models.Players> students = new List<Models.Players>();
-
-            try
-            {
-                using (StreamReader sr = new StreamReader("DealOrNoDeal.txt")) // Text file located in bin > Debug
-                {
-                    while(!sr.EndOfStream)
-                    {
-                        Models.Players student = new Models.Players
-                        {
-                            FirstName = sr.ReadLine(),
-                            LastName = sr.ReadLine(),
-                            Interest = sr.ReadLine()
-                        };
-                        students.Add(student);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error reading from DealOrNoDeal.txt file...");
-                Console.WriteLine(ex.Message);
-            }
-
-            return students;
-        }
-
-        /// <summary>
         /// This method will be sorting the last name from a - z
         /// </summary>
         /// <param name="student"></param>
@@ -332,20 +299,6 @@ namespace DealOrNoDeal
             temp = pos1;        //General idea: pos1 = pos2 && pos2 = pos1
             pos1 = pos2;
             pos2 = temp;
-        }
-
-        /// <summary>
-        /// This method will print the list of players
-        /// </summary>
-        /// <param name="playerList"></param>
-        public static void PrintPlayerInfo(List<Models.Players> playerList)
-        {
-            Console.Clear();
-            Console.WriteLine("First Name".PadRight(15) + "Last Name".PadRight(15) + "Interest".PadRight(15) + "\n"); // Title of each column
-            foreach (Models.Players player in playerList)
-            {
-                Console.WriteLine(player.FirstName.PadRight(15) + player.LastName.PadRight(15) + player.Interest.PadRight(15)); // print first name, last name and interest with padding
-            }
         }
 
         public static void EditStudents(ref Players[] student)
@@ -467,37 +420,7 @@ namespace DealOrNoDeal
             sw.Close();                                 //Making sure to close stream writer
         }
 
-        /// <summary>
-        /// Method will read a file holding the case numbers and values
-        /// </summary>
-        /// <param name="money"></param>
-        public static List<Models.Case> ReadBriefcaseList()
-        {
-            List<Models.Case> moneyList = new List<Models.Case>();
-
-            try
-            {
-                using (StreamReader sr = new StreamReader("TestCase.txt"))
-                {
-                    while(!sr.EndOfStream)
-                    {
-                        Models.Case suitcase = new Models.Case
-                        {
-                            CaseNumber = Convert.ToInt32(sr.ReadLine()),
-                            CaseMoney = Convert.ToInt32(sr.ReadLine())
-                        };
-                        moneyList.Add(suitcase);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error reading from TestCase.txt file...");
-                Console.WriteLine(ex.Message);
-            }
-
-            return moneyList;
-        }
+        
 
         /// <summary>
         /// Checking for repeating numbers up to 26
