@@ -34,8 +34,8 @@ namespace DealOrNoDeal
             MenuOperations.ShowIntroText();
             int menuChoice = 0;
 
-            List<Models.Players> student = StudentReadList();
-            List<Models.Case> money = SuitCaseReadList();
+            List<Models.Players> playersList = ReadPlayerList();
+            List<Models.Case> briefcaseList = ReadBriefcaseList();
 
             while (menuChoice != 6)
             {
@@ -47,8 +47,8 @@ namespace DealOrNoDeal
                     case 1:
                         Console.WriteLine("Full List");
                         //ClassSort(ref student);
-                        //Display(ref student);
-                        //ReturnToMenu();
+                        PrintPlayerInfo(playersList);
+                        ReturnToMenu();
                         break;
                     case 2:
                         Console.WriteLine("Edit a players infromation");
@@ -273,7 +273,7 @@ namespace DealOrNoDeal
         /// This method will be reading in the deal or no deal text
         /// </summary>
         /// <returns>List of students</returns>
-        public static List<Models.Players> StudentReadList()
+        public static List<Models.Players> ReadPlayerList()
         {
             List<Models.Players> students = new List<Models.Players>();
 
@@ -335,26 +335,23 @@ namespace DealOrNoDeal
         }
 
         /// <summary>
-        /// This method will display the list of player or students 
+        /// This method will print the list of players
         /// </summary>
-        /// <param name="student"></param>
-        public static void Display(ref Players[] student)
+        /// <param name="playerList"></param>
+        public static void PrintPlayerInfo(List<Models.Players> playerList)
         {
             Console.Clear();
-            int count = 0;              //count will act as the index counter
-            Console.WriteLine("First Name".PadRight(15) + "Last Name".PadRight(15) + "Interest".PadRight(15) + "\n");   //Title of each column
-            do                                  //do this
+            Console.WriteLine("First Name".PadRight(15) + "Last Name".PadRight(15) + "Interest".PadRight(15) + "\n"); // Title of each column
+            foreach (Models.Players player in playerList)
             {
-                Console.WriteLine(student[count].firstName.PadRight(15) + student[count].lastName.PadRight(15) + student[count].interest.PadRight(15));    //Display first and last name and interest will padding
-                count = count + 1;      //count + 1, will move to the next index slot                                                                      //Using the struct array name "student" 
-
-            } while (count < student.Length);  //while count is less than the student length (21)
+                Console.WriteLine(player.FirstName.PadRight(15) + player.LastName.PadRight(15) + player.Interest.PadRight(15)); // print first name, last name and interest with padding
+            }
         }
 
         public static void EditStudents(ref Players[] student)
         {
             ClassSort(ref student);
-            Display(ref student);
+            //PrintPlayerInfo(ref student);
             bool found = false;
             bool invalidSectionPick = false;
             int attempt = 0;
@@ -369,7 +366,7 @@ namespace DealOrNoDeal
                     string newWanted = Console.ReadLine().ToLower().Substring(0, 1);    //Asking for input again and storing it 
                     wanted = newWanted;                                                 //old input will equal the new input
                     Console.Clear();
-                    Display(ref student);                                               //Calling or going to the display method
+                    //PrintPlayerInfo(ref student);                                               //Calling or going to the display method
                 }
                 attempt = attempt + 1;                  //Attempt will + 1 if input was wrong
 
@@ -415,7 +412,7 @@ namespace DealOrNoDeal
                                     invalidSectionPick = false;
                                     break;
                                 case 5:
-                                    //StudentReadList(ref student);                               //Calling or going to the readlist method
+                                    //ReadPlayerList(ref student);                               //Calling or going to the readlist method
                                     Console.Clear();
                                     DisplayMenu();                                                     //Calling or going to the menu method
                                     break;
@@ -437,12 +434,12 @@ namespace DealOrNoDeal
                                 if (update == "y")                              //if true
                                 {
                                     Console.Clear();
-                                    Display(ref student);                   //Display updated list
+                                    //PrintPlayerInfo(ref student);                   //Display updated list
                                     ReturnToMenu();                               //Take then back to the menu
                                 }
                             }
                             Console.Clear();
-                            Display(ref student);
+                            //PrintPlayerInfo(ref student);
                         } while (invalidSectionPick == true); //Keep doing this while invalidSectionPick is true
                     }
 
@@ -474,7 +471,7 @@ namespace DealOrNoDeal
         /// Method will read a file holding the case numbers and values
         /// </summary>
         /// <param name="money"></param>
-        public static List<Models.Case> SuitCaseReadList()
+        public static List<Models.Case> ReadBriefcaseList()
         {
             List<Models.Case> moneyList = new List<Models.Case>();
 
