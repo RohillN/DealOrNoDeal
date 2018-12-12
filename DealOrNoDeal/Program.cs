@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 
@@ -21,85 +22,63 @@ namespace DealOrNoDeal
     class Program
     {
         private static int end = 6, choicePick = 1;
-        public static Random rand = new Random();
+        private static Random rand = new Random();
 
         public static void Main()
         {
-            Menu();
+            DisplayMenu();
         }
 
-        public static void Menu()
+        public static void DisplayMenu()
         {
-            bool invalidSectionPick = false;
-            IntroText();
-            Players[] student = new Players[21];
-            Case[] money = new Case[26];
-            StudentReadList(ref student);
-            SuitCaseReadList(ref money);
-            do
+            MenuOperations.ShowIntroText();
+            int menuChoice = 0;
+
+            List<Models.Players> student = StudentReadList();
+            List<Models.Case> money = SuitCaseReadList();
+
+            while (menuChoice != 6)
             {
                 Console.Write("Select 1/2/3/4/5/6\n1 = Read Full List\n2 = Edit Players Information\n3 = Top 10 Players / Finalist / Game\n4 = Finalist / Game\n5 = Game\n6 = Quit\nEnter Here: ");
-                int temp = Convert.ToInt32(Console.ReadLine());
+                menuChoice = Convert.ToInt32(Console.ReadLine());
 
-                switch (temp)
+                switch (menuChoice)
                 {
                     case 1:
                         Console.WriteLine("Full List");
-                        ClassSort(ref student);
-                        Display(ref student);
-                        ToMenu();
-                        invalidSectionPick = false;
+                        //ClassSort(ref student);
+                        //Display(ref student);
+                        //ReturnToMenu();
                         break;
                     case 2:
                         Console.WriteLine("Edit a players infromation");
-                        EditStudents(ref student);
-                        invalidSectionPick = false;
+                        //EditStudents(ref student);
                         break;
                     case 3:
                         Console.WriteLine("Top 10 People and Finalist");
-                        ClassSort(ref student);
-                        CheckDuplicatePlayers(ref student, ref money);
-                        invalidSectionPick = false;
+                        //ClassSort(ref student);
+                        //CheckDuplicatePlayers(ref student, ref money);
                         break;
                     case 4:
-                        Checker(ref student, ref money);
-                        invalidSectionPick = false;
+                        //Checker(ref student, ref money);
                         break;
                     case 5:
                         Console.WriteLine("Deal or No Deal");
-                        CheckDuplicateCaseMoney(ref money);
-                        invalidSectionPick = false;
+                        //CheckDuplicateCaseMoney(ref money);
                         break;
                     case 6:
                         Console.WriteLine("Quitting...");
                         Environment.Exit(0);
                         break;
                     default:
-                        invalidSectionPick = true;
+                        Console.Clear();
+                        MenuOperations.ShowIntroText();
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.Write("*** Invalid input try again ***\n\n");
+                        Console.ResetColor();
                         break;
                 }
-                if (invalidSectionPick == true)
-                {
-                    Console.Clear();
-                    IntroText();
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.Write("*** Invalid input try again ***\n\n");
-                    Console.ResetColor();
-                }
-            } while (invalidSectionPick == true);
-        }
-
-        public static void IntroText()
-        {
-            //Ascii generated text found online
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine(@"'||''|.                   '||   ..|''||           '|.   '|'         '||''|.                   '||  ");
-            Console.WriteLine(@" ||   ||    ....   ....    ||  .|'    ||  ... ..   |'|   |    ...    ||   ||    ....   ....    ||  ");
-            Console.WriteLine(@" ||    || .|...|| '' .||   ||  ||      ||  ||' ''  | '|. |  .|  '|.  ||    || .|...|| '' .||   ||  ");
-            Console.WriteLine(@" ||    || ||      .|' ||   ||  '|.     ||  ||      |   |||  ||   ||  ||    || ||      .|' ||   ||  ");
-            Console.WriteLine(@".||...|'   '|...' '|..'|' .||.  ''|...|'  .||.    .|.   '|   '|..|' .||...|'   '|...' '|..'|' .||. ");
-            Console.WriteLine(@"");
-            Console.ResetColor();
+            }
         }
 
         /// <summary>
@@ -184,7 +163,7 @@ namespace DealOrNoDeal
             else                                                           //if false 
             {
                 Console.Clear();
-                Menu();                                                   //Calling or going to the menu method
+                DisplayMenu();                                                   //Calling or going to the menu method
             }
         }
 
@@ -222,7 +201,7 @@ namespace DealOrNoDeal
             else                                                            //If false
             {
                 Console.Clear();
-                Menu();                                                     //Calling or going to menu method
+                DisplayMenu();                                                     //Calling or going to menu method
             }
         }
 
@@ -245,7 +224,7 @@ namespace DealOrNoDeal
             else                                                        //If false
             {
                 Console.Clear();
-                Menu();                                                //Calling or going to the menu method 
+                DisplayMenu();                                                //Calling or going to the menu method 
             }
         }
 
@@ -282,31 +261,45 @@ namespace DealOrNoDeal
         /// <summary>
         /// Simple return to menu method that doesnt require storing of text / number input
         /// </summary>
-        public static void ToMenu()
+        public static void ReturnToMenu()
         {
-            Console.Write("\nPress ENTER to retrun to menu");         //Tell the user to press ENTER
-            Console.ReadLine();                                       //It will stay as a read line untill ENTER is pressed
-            Console.Clear();                                          //Clear console
-            Menu();                                                   //Calling or going to the menu method
+            Console.Write("\nPress ENTER to return to menu");
+            Console.ReadLine();
+            Console.Clear();
+            DisplayMenu();
         }
 
         /// <summary>
-        /// This method will be reading in the deal or no deal text 
+        /// This method will be reading in the deal or no deal text
         /// </summary>
-        /// <param name="student"></param>
-        public static void StudentReadList(ref Players[] student)
+        /// <returns>List of students</returns>
+        public static List<Models.Players> StudentReadList()
         {
-            StreamReader sr = new StreamReader("DealOrNoDeal.txt");      //Declare stream reader and the text file // Text file located in bin > Debug 
-            int count = 0;                                               //count starting from 0 // This will act as the index slot
-            do                                                           //do this
-            {
-                student[count].firstName = sr.ReadLine();                //using the struct array name "student" and using the index "count" and selecting the struct name "firstName" // Then stream reading it in that slot
-                student[count].lastName = sr.ReadLine();                 //using the struct array name "student" and using the index "count" and selecting the struct name "lastName" // Then stream reading it in that slot
-                student[count].interest = sr.ReadLine();                 //using the struct array name "student" and using the index "count" and selecting the struct name "interest"// Then stream reading it in that slot
-                count = count + 1;                                       //count will + 1 // moving the the next index slot
-            } while (!sr.EndOfStream);                                  //While stream reader is not at the end or the stream or file
+            List<Models.Players> students = new List<Models.Players>();
 
-            sr.Close();                                                 //Making sure to close the stream reader
+            try
+            {
+                using (StreamReader sr = new StreamReader("DealOrNoDeal.txt")) // Text file located in bin > Debug
+                {
+                    while(!sr.EndOfStream)
+                    {
+                        Models.Players student = new Models.Players
+                        {
+                            FirstName = sr.ReadLine(),
+                            LastName = sr.ReadLine(),
+                            Interest = sr.ReadLine()
+                        };
+                        students.Add(student);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error reading from DealOrNoDeal.txt file...");
+                Console.WriteLine(ex.Message);
+            }
+
+            return students;
         }
 
         /// <summary>
@@ -422,9 +415,9 @@ namespace DealOrNoDeal
                                     invalidSectionPick = false;
                                     break;
                                 case 5:
-                                    StudentReadList(ref student);                               //Calling or going to the readlist method
+                                    //StudentReadList(ref student);                               //Calling or going to the readlist method
                                     Console.Clear();
-                                    Menu();                                                     //Calling or going to the menu method
+                                    DisplayMenu();                                                     //Calling or going to the menu method
                                     break;
                                 default:
                                     invalidSectionPick = true;                              //bool will equal true
@@ -445,7 +438,7 @@ namespace DealOrNoDeal
                                 {
                                     Console.Clear();
                                     Display(ref student);                   //Display updated list
-                                    ToMenu();                               //Take then back to the menu
+                                    ReturnToMenu();                               //Take then back to the menu
                                 }
                             }
                             Console.Clear();
@@ -481,19 +474,32 @@ namespace DealOrNoDeal
         /// Method will read a file holding the case numbers and values
         /// </summary>
         /// <param name="money"></param>
-        public static void SuitCaseReadList(ref Case[] money)
+        public static List<Models.Case> SuitCaseReadList()
         {
-            StreamReader sr = new StreamReader("TestCase.txt");     //Declare stream reader and the text file name located bin > Debug
-            int count = 0;                                      //count will act as index
-            do
+            List<Models.Case> moneyList = new List<Models.Case>();
+
+            try
             {
-                money[count].caseNumber = Convert.ToInt32(sr.ReadLine());       //array struct name "money" and the index slot "count" with the holder name "caseNumber" will be read into that slot and converted
-                money[count].caseMoney = Convert.ToInt32(sr.ReadLine());        //array struct name "money" and the index slot "count" with the holder name "caseMoney" will be read into that slot and converted
-                count = count + 1;                                              //count + 1, moving to the next index slot
+                using (StreamReader sr = new StreamReader("TestCase.txt"))
+                {
+                    while(!sr.EndOfStream)
+                    {
+                        Models.Case suitcase = new Models.Case
+                        {
+                            CaseNumber = Convert.ToInt32(sr.ReadLine()),
+                            CaseMoney = Convert.ToInt32(sr.ReadLine())
+                        };
+                        moneyList.Add(suitcase);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error reading from TestCase.txt file...");
+                Console.WriteLine(ex.Message);
+            }
 
-            } while (!sr.EndOfStream);                      //While stream reader is not at the end or the stream or file
-
-            sr.Close();
+            return moneyList;
         }
 
         /// <summary>
@@ -709,7 +715,7 @@ namespace DealOrNoDeal
                 {
                     Console.Clear();
                     Console.WriteLine("DEAL!!\nYou have won {0:c}", offer);     //Display the offer if the user takes it
-                    ToMenu();                                                   //Calling or going to the Tomenu method
+                    ReturnToMenu();                                                   //Calling or going to the Tomenu method
                 }
             }
             else
@@ -747,7 +753,7 @@ namespace DealOrNoDeal
                 }
             }
 
-            ToMenu();           //Calling or going to the menu method
+            ReturnToMenu();           //Calling or going to the menu method
         }
     }
 }
