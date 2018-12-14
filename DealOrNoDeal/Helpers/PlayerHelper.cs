@@ -46,6 +46,7 @@ namespace DealOrNoDeal.Helpers
         public static void PrintPlayerInfo(List<Models.Players> playerList)
         {
             Console.Clear();
+            playerList.Sort();
             Console.WriteLine("First Name".PadRight(15) + "Last Name".PadRight(15) + "Interest".PadRight(15) + "\n"); // Title of each column
             foreach (Models.Players player in playerList)
             {
