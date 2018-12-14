@@ -31,12 +31,11 @@ namespace DealOrNoDeal
 
         public static void DisplayMenu()
         {
-            MenuOperations.ShowIntroText();
-            int menuChoice = 0;
-
             List<Models.Players> playersList = Helpers.PlayerHelper.ReadPlayerList();
             List<Models.Case> briefcaseList = Helpers.BriefcaseHelper.ReadBriefcaseList();
+            int menuChoice = 0;
 
+            MenuOperations.ShowIntroText();
             while (menuChoice != 6)
             {
                 Console.Write("Select 1/2/3/4/5/6\n1 = Read Full Player List\n2 = Edit Players Information\n3 = Top 10 Players / Finalist / Game\n4 = Finalist / Game\n5 = Game\n6 = Quit\nEnter Here: ");
@@ -46,7 +45,6 @@ namespace DealOrNoDeal
                 {
                     case 1:
                         Console.WriteLine("Full Player List");
-                        //ClassSort(ref student);
                         Helpers.PlayerHelper.PrintPlayerInfo(playersList);
                         ReturnToMenu();
                         break;
@@ -268,42 +266,10 @@ namespace DealOrNoDeal
             Console.Clear();
             DisplayMenu();
         }
-
-        /// <summary>
-        /// This method will be sorting the last name from a - z
-        /// </summary>
-        /// <param name="student"></param>
-        public static void ClassSort(ref Players[] student)
-        {
-            for (int i = 0; i < student.Length - 1; i++)                //For the length of student array (21) - 1 // so it doesnt fall off the array
-            {
-                for (int pos = 0; pos < student.Length - 1; pos++)      //For the length of student array (21)  - 1 and using pos // so it doesnt fall off the array
-                {
-                    if (student[pos + 1].lastName.CompareTo(student[pos].lastName) < 0)     //comparing pos + 1 to pos // if its less that zero   
-                    {
-                        ClassSwap(ref student[pos + 1], ref student[pos]);                  //Calling or going to the swap method
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Swaping method 
-        /// </summary>
-        /// <param name="pos1"></param>
-        /// <param name="pos2"></param>
-        public static void ClassSwap(ref Players pos1, ref Players pos2)
-        {
-            Players temp;       //Temp will hold the players struct data type
-
-            temp = pos1;        //General idea: pos1 = pos2 && pos2 = pos1
-            pos1 = pos2;
-            pos2 = temp;
-        }
-
+        
         public static void EditStudents(ref Players[] student)
         {
-            ClassSort(ref student);
+            //ClassSort(ref student);
             //PrintPlayerInfo(ref student);
             bool found = false;
             bool invalidSectionPick = false;
@@ -395,10 +361,8 @@ namespace DealOrNoDeal
                             //PrintPlayerInfo(ref student);
                         } while (invalidSectionPick == true); //Keep doing this while invalidSectionPick is true
                     }
-
                 }
             } while (found == false);   //Keep doing this while found is false
-
         }
 
         /// <summary>
@@ -419,9 +383,7 @@ namespace DealOrNoDeal
 
             sw.Close();                                 //Making sure to close stream writer
         }
-
         
-
         /// <summary>
         /// Checking for repeating numbers up to 26
         /// </summary>
@@ -594,6 +556,7 @@ namespace DealOrNoDeal
                 }
             }
         }
+
         public static void Banker(ref Case[] money, ref int[] check, ref int[] randomC, ref int caseHold, ref int playC)
         {
             double offer;
