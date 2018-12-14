@@ -16,7 +16,7 @@ namespace DealOrNoDeal.Helpers
 
             try
             {
-                using (StreamReader sr = new StreamReader("DealOrNoDeal.txt")) // Text file located in bin > Debug
+                using (StreamReader sr = new StreamReader("..\\..\\Assets\\DealOrNoDeal.txt")) // Text file located in bin > Debug
                 {
                     while (!sr.EndOfStream)
                     {

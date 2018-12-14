@@ -16,7 +16,7 @@ namespace DealOrNoDeal.Helpers
 
             try
             {
-                using (StreamReader sr = new StreamReader("TestCase.txt"))
+                using (StreamReader sr = new StreamReader("..\\..\\Assets\\TestCase.txt"))
                 {
                     while (!sr.EndOfStream)
                     {
