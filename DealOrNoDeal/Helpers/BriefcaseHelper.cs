@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DealOrNoDeal.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -10,9 +11,9 @@ namespace DealOrNoDeal.Helpers
         /// Method will read a file holding the case numbers and values
         /// </summary>
         /// <param name="money"></param>
-        public static List<Models.Case> ReadBriefcaseList()
+        public static List<Case> ReadBriefcaseList()
         {
-            List<Models.Case> moneyList = new List<Models.Case>();
+            List<Case> moneyList = new List<Case>();
 
             try
             {
@@ -20,7 +21,7 @@ namespace DealOrNoDeal.Helpers
                 {
                     while (!sr.EndOfStream)
                     {
-                        Models.Case suitcase = new Models.Case
+                        Case suitcase = new Case
                         {
                             CaseNumber = Convert.ToInt32(sr.ReadLine()),
                             CaseMoney = Convert.ToInt32(sr.ReadLine())
