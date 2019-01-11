@@ -1,6 +1,7 @@
 ﻿using DealOrNoDeal.Models;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace DealOrNoDeal
 {
@@ -55,11 +56,11 @@ namespace DealOrNoDeal
                         break;
                     case 3:
                         Console.WriteLine("Top 10 People and Finalist");
-                        //ClassSort(ref student);
-                        //CheckDuplicatePlayers(ref student, ref money);
+                        Helpers.PlayerHelper.CheckDuplicatePlayers(playersList, briefcaseList, true);
                         break;
                     case 4:
-                        //Checker(ref student, ref money);
+                        Console.WriteLine("Finalist");
+                        Helpers.PlayerHelper.CheckDuplicatePlayers(playersList, briefcaseList, false);
                         break;
                     case 5:
                         Console.WriteLine("Deal or No Deal");
@@ -77,6 +78,36 @@ namespace DealOrNoDeal
                         Console.ResetColor();
                         break;
                 }
+            }
+        }
+
+        /// <summary>
+        /// This method is the intro to the game. It will false the text and change colors
+        /// </summary>
+        public void GameFlash()
+        {
+            for (int i = 0; i <= 1; i++)            //For looping once
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;    //Foreground color will change
+                Console.WriteLine("DEAL OR NO DEAL");             //The text that is going to be displayed
+                Thread.Sleep(200);                                //Small pause
+                Console.Clear();                                  //Clear console
+                Console.ResetColor();                             //All the color will reset
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("DEAL OR NO DEAL");
+                Thread.Sleep(200);
+                Console.Clear();
+                Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.WriteLine("DEAL OR NO DEAL");
+                Thread.Sleep(200);
+                Console.Clear();
+                Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("DEAL OR NO DEAL");
+                Thread.Sleep(200);
+                Console.Clear();
+                Console.ResetColor();
             }
         }
     }

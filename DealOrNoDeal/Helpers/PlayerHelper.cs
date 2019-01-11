@@ -7,6 +7,8 @@ namespace DealOrNoDeal.Helpers
 {
     public class PlayerHelper
     {
+        private static Random rand = new Random();
+
         /// <summary>
         /// This method will be reading in the deal or no deal text
         /// </summary>
@@ -169,6 +171,97 @@ namespace DealOrNoDeal.Helpers
             {
                 Console.WriteLine("Error writing to DealOrNoDeal.txt file...");
                 Console.WriteLine(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Checking for repeating numbers up to 10. This method is for the top ten (FOR MENU 3)
+        /// </summary>
+        /// <param name="playerList"></param>
+        /// <param name="briefcaseList"></param>
+        public static void CheckDuplicatePlayers(List<Players> playerList, List<Case> briefcaseList, bool displayTopTen)
+        {
+            List<int> playerIndexList = new List<int>();
+            bool isIndexUnique = false;
+            for(int i = 0; i < 10; i++)
+            {
+                int playerIndex = rand.Next(0, 21);
+                while(!isIndexUnique)
+                {
+                    if (!playerIndexList.Contains(playerIndex))
+                    {
+                        isIndexUnique = true;
+                        playerIndexList.Add(playerIndex);
+                    }
+                    else
+                    {
+                        playerIndex = rand.Next(1, 21);
+                    }
+                }
+                isIndexUnique = false;
+            }
+
+            if(displayTopTen)
+            {
+                PickTenPlayers(playerList, briefcaseList, playerIndexList);
+            }
+            else
+            {
+                PickOne(playerList, briefcaseList, playerIndexList);
+            }
+        }
+
+        /// <summary>
+        /// Displaying top 10 indexes and putting in a playerIndexList
+        /// </summary>
+        /// <param name="playerList"></param>
+        /// <param name="briefcaseList"></param>
+        /// <param name="playerIndexList"></param>
+        public static void PickTenPlayers(List<Players> playerList, List<Case> briefcaseList, List<int> playerIndexList)
+        {
+            MenuOperations menuOps = new MenuOperations();
+            Console.Clear();
+            Console.WriteLine("Top ten finalist");
+
+            foreach(int playerIndex in playerIndexList)
+            {
+                Console.WriteLine(playerList[playerIndex].FirstName + " " + playerList[playerIndex].LastName);
+            }
+
+            Console.Write("\n\nPick one random winning player? Y/N: ");
+            string resp = Console.ReadLine().ToUpper().Substring(0, 1);
+
+            if (resp == "Y")
+            {
+                PickOne(playerList, briefcaseList, playerIndexList);
+            }
+            else
+            {
+                Console.Clear();
+                menuOps.DisplayMenu();
+            }
+        }
+
+        public static void PickOne(List<Players> playerList, List<Case> briefcaseList, List<int> playerIndexList)
+        {
+            MenuOperations menuOps = new MenuOperations();
+            int winningPlayerIndex = playerIndexList[rand.Next(0, 10)];
+            Console.WriteLine("\nWinning player is... " + playerList[winningPlayerIndex].FirstName +
+                " " + playerList[winningPlayerIndex].LastName + "\n");
+
+            Console.Write("\nWould you like to play the game? Y/N: ");
+            string resp = Console.ReadLine().ToUpper().Substring(0, 1);
+
+            if (resp == "Y")
+            {
+                Console.Clear();
+                menuOps.GameFlash();
+                //CheckDuplicateCaseMoney(ref money);
+            }
+            else
+            {
+                Console.Clear();
+                menuOps.DisplayMenu();
             }
         }
     }
