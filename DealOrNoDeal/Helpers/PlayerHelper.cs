@@ -101,19 +101,19 @@ namespace DealOrNoDeal.Helpers
                     case 1:
                         Console.Write("\nEnter new first name: ");
                         player.FirstName = Console.ReadLine();
-                        WriteNewList(playerList);
+                        WriteNewPlayerList(playerList);
                         isValidSectionProcessed = true;
                         break;
                     case 2:
                         Console.Write("\nEnter new last name: ");
                         player.LastName = Console.ReadLine();
-                        WriteNewList(playerList);
+                        WriteNewPlayerList(playerList);
                         isValidSectionProcessed = true;
                         break;
                     case 3:
                         Console.Write("\nEnter new interest: ");
                         player.Interest = Console.ReadLine();
-                        WriteNewList(playerList);
+                        WriteNewPlayerList(playerList);
                         isValidSectionProcessed = true;
                         break;
                     case 4:
@@ -123,7 +123,7 @@ namespace DealOrNoDeal.Helpers
                         player.LastName = Console.ReadLine();
                         Console.Write("\nEnter new interest: ");
                         player.Interest = Console.ReadLine();
-                        WriteNewList(playerList);
+                        WriteNewPlayerList(playerList);
                         isValidSectionProcessed = true;
                         break;
                     case 5:
@@ -153,7 +153,7 @@ namespace DealOrNoDeal.Helpers
         /// This method will write back to the main text file
         /// </summary>
         /// <param name="playerList"></param>
-        public static void WriteNewList(List<Players> playerList)
+        public static void WriteNewPlayerList(List<Players> playerList)
         {
             try
             {
@@ -178,8 +178,7 @@ namespace DealOrNoDeal.Helpers
         /// Checking for repeating numbers up to 10. This method is for the top ten (FOR MENU 3)
         /// </summary>
         /// <param name="playerList"></param>
-        /// <param name="briefcaseList"></param>
-        public static void CheckDuplicatePlayers(List<Players> playerList, List<Case> briefcaseList, bool displayTopTen)
+        public static void CheckDuplicatePlayers(List<Players> playerList, bool displayTopTen)
         {
             List<int> playerIndexList = new List<int>();
             bool isIndexUnique = false;
@@ -203,11 +202,11 @@ namespace DealOrNoDeal.Helpers
 
             if(displayTopTen)
             {
-                PickTenPlayers(playerList, briefcaseList, playerIndexList);
+                PickTenPlayers(playerList, playerIndexList);
             }
             else
             {
-                PickOne(playerList, briefcaseList, playerIndexList);
+                PickOne(playerList, playerIndexList);
             }
         }
 
@@ -215,9 +214,8 @@ namespace DealOrNoDeal.Helpers
         /// Displaying top 10 indexes and putting in a playerIndexList
         /// </summary>
         /// <param name="playerList"></param>
-        /// <param name="briefcaseList"></param>
         /// <param name="playerIndexList"></param>
-        public static void PickTenPlayers(List<Players> playerList, List<Case> briefcaseList, List<int> playerIndexList)
+        public static void PickTenPlayers(List<Players> playerList, List<int> playerIndexList)
         {
             MenuOperations menuOps = new MenuOperations();
             Console.Clear();
@@ -233,7 +231,7 @@ namespace DealOrNoDeal.Helpers
 
             if (resp == "Y")
             {
-                PickOne(playerList, briefcaseList, playerIndexList);
+                PickOne(playerList, playerIndexList);
             }
             else
             {
@@ -242,7 +240,7 @@ namespace DealOrNoDeal.Helpers
             }
         }
 
-        public static void PickOne(List<Players> playerList, List<Case> briefcaseList, List<int> playerIndexList)
+        public static void PickOne(List<Players> playerList, List<int> playerIndexList)
         {
             MenuOperations menuOps = new MenuOperations();
             int winningPlayerIndex = playerIndexList[rand.Next(0, 10)];
@@ -256,7 +254,7 @@ namespace DealOrNoDeal.Helpers
             {
                 Console.Clear();
                 menuOps.GameFlash();
-                //CheckDuplicateCaseMoney(ref money);
+                Helpers.BriefcaseHelper.CasePick();
             }
             else
             {

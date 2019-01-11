@@ -10,7 +10,7 @@ namespace DealOrNoDeal.Models
 
         public int CompareTo(Players player)
         {
-            return this.LastName.CompareTo(player.LastName);
+            return LastName.CompareTo(player.LastName);
         }
     }
 }

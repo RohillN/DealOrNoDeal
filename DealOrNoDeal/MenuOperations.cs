@@ -34,7 +34,6 @@ namespace DealOrNoDeal
         public void DisplayMenu()
         {
             List<Players> playersList = Helpers.PlayerHelper.ReadPlayerList();
-            List<Case> briefcaseList = Helpers.BriefcaseHelper.ReadBriefcaseList();
             int menuChoice = 0;
 
             ShowIntroText();
@@ -56,15 +55,15 @@ namespace DealOrNoDeal
                         break;
                     case 3:
                         Console.WriteLine("Top 10 People and Finalist");
-                        Helpers.PlayerHelper.CheckDuplicatePlayers(playersList, briefcaseList, true);
+                        Helpers.PlayerHelper.CheckDuplicatePlayers(playersList, true);
                         break;
                     case 4:
                         Console.WriteLine("Finalist");
-                        Helpers.PlayerHelper.CheckDuplicatePlayers(playersList, briefcaseList, false);
+                        Helpers.PlayerHelper.CheckDuplicatePlayers(playersList, false);
                         break;
                     case 5:
                         Console.WriteLine("Deal or No Deal");
-                        //CheckDuplicateCaseMoney(ref money);
+                        Helpers.BriefcaseHelper.CasePick();
                         break;
                     case 6:
                         Console.WriteLine("Quitting...");
@@ -86,7 +85,7 @@ namespace DealOrNoDeal
         /// </summary>
         public void GameFlash()
         {
-            for (int i = 0; i <= 1; i++)            //For looping once
+            for (int i = 0; i <= 1; i++)
             {
                 Console.ForegroundColor = ConsoleColor.Yellow;    //Foreground color will change
                 Console.WriteLine("DEAL OR NO DEAL");             //The text that is going to be displayed

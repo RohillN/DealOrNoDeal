@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace DealOrNoDeal
+﻿namespace DealOrNoDeal
 {
     class Program
     {
@@ -11,91 +9,7 @@ namespace DealOrNoDeal
             MenuOperations menuOps = new MenuOperations();
             menuOps.DisplayMenu();
         }
-                
-        /// <summary>
-        /// Checking for repeating numbers up to 26
-        /// </summary>
-        /// <param name="money"></param>
-        //public static void CheckDuplicateCaseMoney(ref Case[] money)
-        //{
-        //    Console.Clear();
-
-        //    int[] check = new int[26];
-        //    int[] randomC = new int[26];
-
-        //    for (int i = 0; i < check.Length; i++)           //Looping for the length of the array (10) or (0 to 9)
-        //    {
-        //        int temp = rand.Next(0, 26);                //temp holding a random number
-        //        int count = 0;                              //count starting at 0
-
-        //        while (count < i)                          //While count is less than or equal to i
-        //        {
-        //            if (temp == check[count])              //checking if the temps random numbers equals array slot "count" value
-        //            {
-        //                count = 0;                          //if its true count will reset 
-        //                temp = rand.Next(0, 26);            //if its true temp will get another rand number
-        //            }
-        //            else                                    //Do this if temp is not equal to the array slot "count" value
-        //            {
-        //                count = count + 1;                  //Count + 1, moving to the next index of the select index
-        //            }
-        //        }
-        //        check[i] = temp;
-        //        randomC[i] = temp;
-        //    }
-        //    Order(ref money, ref check, ref randomC);
-        //}
-
-        //public static void Order(ref Case[] money, ref int[] check, ref int[] randomC)
-        //{
-        //    for (int i = 0; i < check.Length - 1; i++)                //For the length of check array (26) - 1 // so it doesnt fall off the array
-        //    {
-        //        for (int pos = 0; pos < check.Length - 1; pos++)      //For the length of check array (26)  - 1 and using pos // so it doesnt fall off the array
-        //        {
-        //            if (check[pos + 1] < check[pos])                //checking if pos + 1 is less that pos
-        //            {
-        //                CaseSwap(ref check[pos + 1], ref check[pos]);   //Calling or going to swap method
-        //            }
-        //        }
-        //    }
-        //    CasePick(ref money, ref check, ref randomC);        //Calling or going to case pick method
-        //}
-
-        /// <summary>
-        /// Swaping method of numbers
-        /// </summary>
-        /// <param name="pos1"></param>
-        /// <param name="pos2"></param>
-        //public static void CaseSwap(ref int pos1, ref int pos2)
-        //{
-        //    int temp;
-
-        //    temp = pos1;            //General idea: pos1 = pos2  && pos2 = pos1
-        //    pos1 = pos2;
-        //    pos2 = temp;
-        //}
-
-        //public static void CasePick(ref Case[] money, ref int[] check, ref int[] randomC)
-        //{
-        //    int caseHold;
-        //    Console.Write("Pick a case from 1 - 26: ");
-        //    caseHold = Convert.ToInt32(Console.ReadLine());
-        //    if (caseHold <= 0 || caseHold > 26)
-        //    {
-        //        do
-        //        {
-        //            Console.ForegroundColor = ConsoleColor.Red;
-        //            Console.Write("\n\n*** Invalid! Input is out of range! ***");
-        //            Console.ResetColor();
-        //            Console.Write("\nEnter a case number from 1 - 26: ");
-        //            caseHold = Convert.ToInt32(Console.ReadLine());
-        //        } while (caseHold <= 0 || caseHold > 26);
-        //    }
-        //    Console.Clear();
-        //    money[caseHold - 1].off = true;
-        //    Hide(ref money, ref check, ref randomC, ref caseHold);
-        //}
-
+        
         //public static void Hide(ref Case[] money, ref int[] check, ref int[] randomC, ref int caseHold)
         //{
         //    bool found = false;
