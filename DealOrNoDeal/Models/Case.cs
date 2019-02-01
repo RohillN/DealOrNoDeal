@@ -3,7 +3,7 @@
     public class Case
     {
         public int CaseNumber { get; set; }
-        public int CaseMoney { get; set; }
+        public double CaseMoney { get; set; }
         public bool Off { get; set; }
     }
 }
